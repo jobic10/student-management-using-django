@@ -1,0 +1,45 @@
+{% extends 'hod_template/base.html' %}
+{% load static %}
+{% block page_title %}Manage Subject{% endblock page_title %}
+
+{% block content %}
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Manage Subjects</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example2" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>SN</th>
+                                    <th>Subject Name</th>
+                                    <th>Staff Name</th>
+                                    <th>Course Name</th>
+                                    <th>Edit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for subject in subjects %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{subject.name}}</td>
+                                    <td>{{subject.course.name}}</td>
+                                    <td>{{subject.staff.first_name}}</td>
+                                    <td><a href="/edit_subject/{{subject.id}}" class="btn btn-primary">Edit</a></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
