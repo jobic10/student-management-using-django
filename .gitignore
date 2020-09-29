@@ -1,3 +1,6 @@
 .vscode
 .idea
+# *.pyc
 media/
+# main_app/migrations
+

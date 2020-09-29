@@ -22,27 +22,33 @@ class Course(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Student(models.Model):
     course = models.ForeignKey(
-        Course, on_delete=models.DO_NOTHING, null=True, blank=True)
+        Course, on_delete=models.DO_NOTHING, null=True, blank=False)
     admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     gender = models.CharField(max_length=1, choices=GENDER)
     address = models.TextField()
-    profile_pic = models.ImageField(null=True)
+    profile_pic = models.ImageField(upload_to='media')
     session_start_year = models.DateField(null=True)
     session_end_year = models.DateField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.admin.last_name + " " + self.admin.first_name
+
 
 class Staff(models.Model):
     course = models.ForeignKey(
-        Course, on_delete=models.DO_NOTHING, null=True, blank=True)
+        Course, on_delete=models.DO_NOTHING, null=True, blank=False)
     admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     gender = models.CharField(max_length=1, choices=GENDER)
     address = models.TextField()
-    profile_pic = models.ImageField(null=True)
+    profile_pic = models.ImageField(upload_to='media')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
 
@@ -121,6 +127,7 @@ class NotificationStudent(models.Model):
 @receiver(post_save, sender=CustomUser)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
+        print("In Here")
         if instance.user_type == 1:
             AdminHOD.objects.create(admin=instance)
         if instance.user_type == 2:

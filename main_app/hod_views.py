@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
-from django.shortcuts import redirect, render
-
+from django.shortcuts import redirect, render, HttpResponseRedirect
+from .forms import *
 from .models import *
 
 
@@ -45,39 +45,47 @@ def add_staff(request):
 
 def add_student(request):
     if request.method == 'POST':
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        address = request.POST.get('address')
-        username = request.POST.get('username')
-        email = request.POST.get('email')
-        gender = request.POST.get('gender')
-        password = request.POST.get('password')
-        course_id = request.POST.get('course')
-        session_start = request.POST.get('session_start')
-        session_end = request.POST.get('session_end')
-        passport = request.FILES['passport']
-        fs = FileSystemStorage()
-        filename = fs.save(passport.name, passport)
-        passport_url = fs.url(filename)
-        try:
-            course = Course.objects.get(id=course_id)
+        student_form = StudentForm(request.POST, request.FILES)
+        custom_user_form = CustomUserForm(request.POST)
+        context = {
+            'form': [CustomUserForm(request.POST), StudentForm(request.POST)]
 
-            user = CustomUser.objects.create_user(
-                username=username, email=email, password=password, user_type=3, first_name=first_name, last_name=last_name)
-            user.student.gender = gender
-            user.student.address = address
-            user.student.profile_pic = passport_url
-            user.student.session_start_year = session_start
-            user.student.session_end_year = session_end
-            user.student.course = course
-            user.save()
-            messages.success(request, "Successfully Added")
-            return redirect('/add_student/')
-        except Exception as e:
-            messages.warning(request, "Could Not Add: " + str(e))
-            return redirect('/add_student/')
+        }
+        if student_form.is_valid() and custom_user_form.is_valid():
+            first_name = custom_user_form.cleaned_data.get('first_name')
+            last_name = custom_user_form.cleaned_data.get('last_name')
+            address = student_form.cleaned_data.get('address')
+            username = custom_user_form.cleaned_data.get('username')
+            email = custom_user_form.cleaned_data.get('email')
+            gender = student_form.cleaned_data.get('gender')
+            password = custom_user_form.cleaned_data.get('password')
+            course = student_form.cleaned_data.get('course')
+            session_start = student_form.cleaned_data.get('session_start')
+            session_end = student_form.cleaned_data.get('session_end')
+            passport = request.FILES['profile_pic']
+            fs = FileSystemStorage()
+            filename = fs.save(passport.name, passport)
+            passport_url = fs.url(filename)
+            try:
+                user = CustomUser.objects.create_user(
+                    username=username, email=email, password=password, user_type=3, first_name=first_name, last_name=last_name)
+                user.student.gender = gender
+                user.student.address = address
+                user.student.profile_pic = passport_url
+                user.student.session_start_year = session_start
+                user.student.session_end_year = session_end
+                user.student.course = course
+                user.save()
+                messages.success(request, "Successfully Added")
+                return redirect('/add_student/')
+            except Exception as e:
+                messages.warning(request, "Could Not Add: " + str(e))
+                return render(request, 'hod_template/add_student_template.html', context)
+        else:
+            messages.warning(request, "Could Not Add: ")
+            return render(request, 'hod_template/add_student_template.html', context)
     context = {
-        'courses': Course.objects.all()
+        'form': [CustomUserForm(), StudentForm()]
     }
     return render(request, 'hod_template/add_student_template.html', context)
 

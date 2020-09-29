@@ -17,6 +17,8 @@ This is a Simple Student Management System Developed While Learning Django.
 - [x] Upload Student's Picture
 - [x] Sidebar Active Status
 - [x] Named URLs
+- [x] Model Forms for adding  student
+- [ ] Model Forms for all
 - [ ] Student Dashboard (After login in)
 - [ ] Staff Dashboard (After login in)
 - [ ] Session 
@@ -25,3 +27,11 @@ This is a Simple Student Management System Developed While Learning Django.
 
 ## Questions I asked While Developing This
 - https://stackoverflow.com/questions/63829896/is-there-a-specific-way-of-adding-apps-in-django/
+
+
+## Helpful Links
+- https://stackoverflow.com/questions/55969952/how-can-i-avoid-a-user-from-registering-an-already-used-email-in-django
+- https://stackoverflow.com/questions/7562573/how-do-i-get-django-forms-to-show-the-html-required-attribute
+- https://stackoverflow.com/questions/40910149/django-exists-versus-doesnotexist
+- https://www.edureka.co/community/80982/how-can-i-have-multiple-models-in-a-single-django-modelform
+- https://stackoverflow.com/questions/12848605/django-modelform-what-is-savecommit-false-used-for
