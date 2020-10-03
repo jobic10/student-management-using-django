@@ -14,75 +14,7 @@
                         <h3 class="card-title">Add Staff</h3>
                     </div>
 
-                    {% if messages %}
-                    {% for message in messages  %}
-
-                    <div class="alert-{{message.tags}} alert">
-                        {{message}}
-                    </div>
-                    {% endfor %}
-                    {% endif %}
-
-                    <!-- /.card-header -->
-                    <!-- form start -->
-                    <form role="form" method="POST" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label>Email address</label>
-                                <input type="email" name='email' class="form-control" placeholder="Enter email">
-                            </div>
-                            <div class="form-group">
-                                <label>First Name</label>
-                                <input type="text" name="first_name" class="form-control" placeholder="First Name">
-                            </div>
-                            <div class="form-group">
-                                <label>Last Name</label>
-                                <input type="text" name="last_name" class="form-control" placeholder="Last Name">
-                            </div>
-                            <div class="form-group">
-                                <label>Username</label>
-                                <input type="text" name="username" class="form-control" placeholder="Username">
-                            </div>
-                            <div class="form-group">
-                                <label>Address</label>
-                                <input type="text" name="address" class="form-control" placeholder="Address">
-                            </div>
-                            <div class="form-group">
-                                <label>Gender</label>
-                                <select name="gender" class="form-control">
-                                    <option value="">----</option>
-                                    <option value="M">Male</option>
-                                    <option value="F">Female</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Course</label>
-                                <select name="course" class="form-control">
-                                    <option value="">----</option>
-                                    {% for course in courses  %}
-                                    <option value="{{course.id}}">{{course.name}}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Password</label>
-                                <input type="password" class="form-control" name='password' placeholder="Password">
-                            </div>
-                            <div class="form-group">
-                                <label>Avatar</label>
-                                <div class="custom-file">
-                                    <input type="file" name='passport' class="custom-file-input">
-                                    <label class="custom-file-label">Choose file</label>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /.card-body -->
-
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-primary btn-block">Add Staff</button>
-                        </div>
-                    </form>
+                    {% include "hod_template/form_template.html" with messages=messages  form=form button_text="Add Staff"%}
                 </div>
                 <!-- /.card -->
 

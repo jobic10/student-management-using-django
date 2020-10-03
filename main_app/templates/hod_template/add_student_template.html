@@ -14,43 +14,7 @@
                         <h3 class="card-title">Add Student</h3>
                     </div>
 
-                    <div class="form-group">
-                        {% comment %}
-
-                        {% if messages %}
-                        {% for message in messages  %}
-
-                        {% if message.tags == 'success' %}
-                        <div class="alert alert-success">
-                            {{message}}
-                        </div>
-                        {% else %}
-                        <div class="alert alert-danger">
-                            {{message}}
-                        </div>
-                        {% endif %}
-
-                        {% endfor %}
-                        {% endif %}
-                    </div>
-
-                    <!-- /.card-header -->
-                    <!-- form start -->
-                    <form role="form" method="POST" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="card-body">
-                            {{bioForm}}
-                            {{studentForm}}
-                        </div>
-                        <!-- /.card-body -->
-
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-primary btn-block">Add Student</button>
-                        </div>
-                    </form>
-                    {% endcomment %}
-
-                    {% include "hod_template/form_template.html" with messages=messages  form=form button_text="Submit"%}
+                    {% include "hod_template/form_template.html" with messages=messages  form=form button_text="Add Student"%}
                 </div>
                 <!-- /.card -->
 

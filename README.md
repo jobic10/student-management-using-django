@@ -18,11 +18,13 @@ This is a Simple Student Management System Developed While Learning Django.
 - [x] Sidebar Active Status
 - [x] Named URLs
 - [x] Model Forms for adding  student
-- [ ] Model Forms for all
-- [ ] Student Dashboard (After login in)
-- [ ] Staff Dashboard (After login in)
+- [x] Student Dashboard (After login in)
+- [x] Staff Dashboard (After login in)
+- [x] Model Forms for all
+- [x] Views Permission (MiddleWareMixin)
+- [ ] Fix all links to by dynamic
 - [ ] Session 
-- [ ] Code Restructure 
+- [ ] Code Restructure - Very Important
 - [ ] Others 
 
 ## Questions I asked While Developing This
@@ -35,3 +37,8 @@ This is a Simple Student Management System Developed While Learning Django.
 - https://stackoverflow.com/questions/40910149/django-exists-versus-doesnotexist
 - https://www.edureka.co/community/80982/how-can-i-have-multiple-models-in-a-single-django-modelform
 - https://stackoverflow.com/questions/12848605/django-modelform-what-is-savecommit-false-used-for
+- https://simpleisbetterthancomplex.com/tutorial/2018/01/18/how-to-implement-multiple-user-types-with-django.html
+- https://stackoverflow.com/questions/32576348/how-can-i-create-django-modelform-for-an-abstract-model
+- https://www.fomfus.com/articles/how-to-use-email-as-username-for-django-authentication-removing-the-username
+- https://stackoverflow.com/questions/64145745/create-user-missing-1-required-positional-argument-username?noredirect=1#64145844
+- https://stackoverflow.com/questions/36059194/what-is-the-difference-between-json-dump-and-json-dumps-in-python

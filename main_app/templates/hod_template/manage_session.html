@@ -1,0 +1,43 @@
+{% extends 'hod_template/base.html' %}
+{% load static %}
+{% block page_title %}Manage Session{% endblock page_title %}
+
+{% block content %}
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Manage All Sessions</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example2" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>SN</th>
+                                    <th>Start</th>
+                                    <th>End</th>
+                                    <th>Edit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for session in sessions %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{session.start_year}}</td>
+                                    <td>{{session.end_year}}</td>
+                                    <td><a href="/edit_session/{{session.id}}" class="btn btn-primary">Edit</a></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

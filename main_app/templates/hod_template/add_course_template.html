@@ -14,33 +14,7 @@
                         <h3 class="card-title">Add Course</h3>
                     </div>
 
-                    {% if messages %}
-                    {% for message in messages  %}
-
-                    <div class="alert-{{message.tags}} alert">
-                        {{message}}
-                    </div>
-                    {% endfor %}
-                    {% endif %}
-
-                    <!-- /.card-header -->
-                    <!-- form start -->
-                    <form role="form" method="POST" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="card-body">
-
-                            <div class="form-group">
-                                <label>Course Name</label>
-                                <input type="text" name="name" class="form-control" placeholder="First Name">
-                            </div>
-
-                        </div>
-                        <!-- /.card-body -->
-
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-primary btn-block">Add Course</button>
-                        </div>
-                    </form>
+                    {% include "hod_template/form_template.html" with messages=messages  form=form button_text="Add Course"%}
                 </div>
                 <!-- /.card -->
 

@@ -14,15 +14,19 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from . import views, hod_views
+from . import views, hod_views, staff_views, student_views
 urlpatterns = [
-    path("", views.login_page),
+    path("", views.login_page, name='login_page'),
     path("doLogin/", views.doLogin, name='user_login'),
     path("get_user_details/", views.getUserDetails, name='get_user_details'),
     path("logout_user/", views.logout_user, name='user_logout'),
     path("admin_home/", hod_views.admin_home, name='admin_home'),
     path("add_staff/", hod_views.add_staff, name='add_staff'),
     path("add_course/", hod_views.add_course, name='add_course'),
+    path("add_session/", hod_views.add_session, name='add_session'),
+    path("manage_session/", hod_views.manage_session, name='manage_session'),
+    path("edit_session/<int:session_id>",
+         hod_views.edit_session, name='edit_session'),
     path("add_student/", hod_views.add_student, name='add_student'),
     path("add_subject/", hod_views.add_subject, name='add_subject'),
     path("manage_staff/", hod_views.manage_staff, name='manage_staff'),
@@ -36,4 +40,14 @@ urlpatterns = [
          hod_views.edit_course, name='edit_course'),
     path("edit_subject/<int:subject_id>",
          hod_views.edit_subject, name='edit_subject'),
+    # Staff
+    path("staff_home/", staff_views.staff_home, name='staff_home'),
+    path("staff_take_attendance/", staff_views.staff_take_attendance,
+         name='staff_take_attendance'),
+    path("get_students", staff_views.get_students, name='get_students'),
+    path("save_attendance", staff_views.save_attendance, name='save_attendance'),
+
+    # Student
+    path("student_home/", student_views.student_home, name='student_home'),
+
 ]

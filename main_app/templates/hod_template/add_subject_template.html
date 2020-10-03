@@ -14,51 +14,7 @@
                         <h3 class="card-title">Add Subject</h3>
                     </div>
 
-                    {% if messages %}
-                    {% for message in messages  %}
-
-                    <div class="alert-{{message.tags}} alert">
-                        {{message}}
-                    </div>
-                    {% endfor %}
-                    {% endif %}
-
-                    <!-- /.card-header -->
-                    <!-- form start -->
-                    <form role="form" method="POST" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="card-body">
-
-                            <div class="form-group">
-                                <label>Subject Name</label>
-                                <input type="text" name="name" class="form-control" placeholder="Subject Name">
-                            </div>
-
-                            <div class="form-group">
-                                <label>Course</label>
-                                <select name="course" class="form-control">
-                                    <option value="">----</option>
-                                    {% for course in courses  %}
-                                    <option value="{{course.id}}">{{course.name}}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Staff</label>
-                                <select name="staff" class="form-control">
-                                    <option value="">----</option>
-                                    {% for stf in staff  %}
-                                    <option value="{{stf.id}}">{{stf.last_name}}, {{stf.first_name}}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                        <!-- /.card-body -->
-
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-primary btn-block">Add Course</button>
-                        </div>
-                    </form>
+                    {% include "hod_template/form_template.html" with messages=messages  form=form button_text="Add Subject"%}
                 </div>
                 <!-- /.card -->
 
