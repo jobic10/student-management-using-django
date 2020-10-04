@@ -65,7 +65,78 @@ def save_attendance(request):
                 student=student, attendance=attendance, status=student_dict.get('status'))
             attendance_report.save()
     except Exception as e:
-        print(str(e))
+        return None
+
+    return HttpResponse("OK")
+
+
+def staff_update_attendance(request):
+    subjects = Subject.objects.filter(staff_id=request.user.id)
+    sessions = Session.objects.all()
+    context = {
+        'subjects': subjects,
+        'sessions': sessions
+    }
+
+    return render(request, 'staff_template/staff_update_attendance.html', context)
+
+
+@csrf_exempt
+def get_attendance(request):
+    subject_id = request.POST.get('subject')
+    session_id = request.POST.get('session')
+    try:
+        subject = get_object_or_404(Subject, id=subject_id)
+        session = get_object_or_404(Session, id=session_id)
+        attendance = Attendance.objects.filter(
+            subject=subject, session=session)
+        attendance_list = []
+        for attd in attendance:
+            data = {"id": attd.id, "attendance_date": str(attd.date),
+                    "session": attd.session.id}
+            attendance_list.append(data)
+        return JsonResponse(json.dumps(attendance_list), safe=False)
+    except Exception as e:
+        print("Error ====> " + str(e))
+        return None
+
+
+@csrf_exempt
+def get_student_attendance(request):
+    attendance_date_id = request.POST.get('attendance_date_id')
+    try:
+        date = get_object_or_404(Attendance, id=attendance_date_id)
+        attendance_data = AttendanceReport.objects.filter(
+            attendance=date)
+        student_data = []
+        for attendance in attendance_data:
+            data = {"id": attendance.student.admin.id,
+                    "name": attendance.student.admin.last_name + " " + attendance.student.admin.first_name,
+                    "status": attendance.status}
+            student_data.append(data)
+        return JsonResponse(json.dumps(student_data), content_type='application/json', safe=False)
+    except Exception as e:
+        print("ERROR==============>" + str(e))
+        return e
+
+
+@csrf_exempt
+def update_attendance(request):
+    student_data = request.POST.get('student_ids')
+    date = request.POST.get('date')
+    students = json.loads(student_data)
+    try:
+        attendance = get_object_or_404(Attendance, id=date)
+
+        for student_dict in students:
+            student = get_object_or_404(
+                Student, admin_id=student_dict.get('id'))
+            print("lllll MESSAGE==========> " + str(student_data))
+            attendance_report = get_object_or_404(
+                AttendanceReport, student=student, attendance=attendance)
+            attendance_report.status = student_dict.get('status')
+            attendance_report.save()
+    except Exception as e:
         return None
 
     return HttpResponse("OK")

@@ -22,6 +22,7 @@ This is a Simple Student Management System Developed While Learning Django.
 - [x] Staff Dashboard (After login in)
 - [x] Model Forms for all
 - [x] Views Permission (MiddleWareMixin)
+- [x] Attendance and Update Attendance
 - [ ] Fix all links to by dynamic
 - [ ] Session 
 - [ ] Code Restructure - Very Important
@@ -42,3 +43,4 @@ This is a Simple Student Management System Developed While Learning Django.
 - https://www.fomfus.com/articles/how-to-use-email-as-username-for-django-authentication-removing-the-username
 - https://stackoverflow.com/questions/64145745/create-user-missing-1-required-positional-argument-username?noredirect=1#64145844
 - https://stackoverflow.com/questions/36059194/what-is-the-difference-between-json-dump-and-json-dumps-in-python
+- https://stackoverflow.com/questions/64188313/django-can-i-delete-apps-static-files-after-running-collectstatic/64189244#64189244

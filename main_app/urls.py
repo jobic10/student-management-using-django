@@ -44,8 +44,15 @@ urlpatterns = [
     path("staff_home/", staff_views.staff_home, name='staff_home'),
     path("staff_take_attendance/", staff_views.staff_take_attendance,
          name='staff_take_attendance'),
+    path("staff_update_attendance/", staff_views.staff_update_attendance,
+         name='staff_update_attendance'),
     path("get_students", staff_views.get_students, name='get_students'),
+    path("get_attendance", staff_views.get_attendance, name='get_attendance'),
+    path("get_student_attendance", staff_views.get_student_attendance,
+         name='get_student_attendance'),
     path("save_attendance", staff_views.save_attendance, name='save_attendance'),
+    path("update_attendance", staff_views.update_attendance,
+         name='update_attendance'),
 
     # Student
     path("student_home/", student_views.student_home, name='student_home'),

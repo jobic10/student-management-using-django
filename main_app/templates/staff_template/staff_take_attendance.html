@@ -79,50 +79,18 @@
 {% block custom_js %}
 <script>
     $(document).ready(function () {
-        $(this).attr("disabled","disabled")
-        $(this).text("Saving Attendance Data...")
-        $(document).on('click', '#save_attendance', function () {
-            var student_data = $("input[name='student_data[]']").map(function () {
-                if ($(this).is(":checked")){
-                return {'id':$(this).val(), 'status': 1};
 
-                }
-                return {'id':$(this).val(), 'status': 0};
-
-            }).get()
-            var attendance_date = $('#attendance_date').val()
-            var subject = $("#subject").val()
-            var session = $("#session").val()
-            student_data = JSON.stringify(student_data)
-            $.ajax({
-                url: '{% url 'save_attendance' %}',
-                type: 'POST',
-                data: {
-                    date: attendance_date,
-                    student_ids: student_data,
-                    session:session,
-                    subject:subject,
-                }
-            }).done(function (response) {
-                if (response == 'OK'){
-                    alert("Saved")
-                }else{
-                    alert("Error. Please try again")
-                }
-                location.reload()
-                
-            }).fail(function (response) {
-                alert("Error in saving attendance")
-            })
-
-        })
+       
         $("#fetch_student").click(function () {
             var subject = $("#subject").val()
             var session = $("#session").val()
             $("#student_data").html(null)
-
+if (subject.length  == 0 || session.length == 0){
+    alert("Please select session and subject");
+    return false;
+}
             $.ajax({
-                url: '{% url 'get_students' %}',
+                url: "{% url 'get_students' %}",
                 type: 'POST',
                 data: {
                     subject: subject,
@@ -143,8 +111,49 @@
                     $("#student_data").html(div_data)
                 }
             }).fail(function (response) {
-                alert("Error in fetch students")
+                alert("Error in fetching students")
             })
+
+
+            $(document).on('click', '#save_attendance', function () {
+                $(this).attr("disabled","disabled")
+                $(this).text("Saving Attendance Data...")
+                var student_data = $("input[name='student_data[]']").map(function () {
+                    if ($(this).is(":checked")){
+                    return {'id':$(this).val(), 'status': 1};
+    
+                    }
+                    return {'id':$(this).val(), 'status': 0};
+    
+                }).get()
+                var attendance_date = $('#attendance_date').val()
+                if (attendance_date.length < 10){
+                    alert("Select date")
+                    return false;
+                }
+                student_data = JSON.stringify(student_data)
+                $.ajax({
+                    url: "{% url 'save_attendance' %}",
+                    type: 'POST',
+                    data: {
+                        date: attendance_date,
+                        student_ids: student_data,
+            
+                    }
+                }).done(function (response) {
+                    if (response == 'OK'){
+                        alert("Saved")
+                    }else{
+                        alert("Error. Please try again")
+                    }
+                    location.reload()
+                    
+                }).fail(function (response) {
+                    alert("Error in saving attendance")
+                })
+    
+            })
+
 
         })
     })
