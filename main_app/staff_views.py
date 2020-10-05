@@ -155,8 +155,7 @@ def staff_apply_leave(request):
                     request, "Application for leave has been submitted for review")
                 return redirect(reverse('staff_apply_leave'))
             except Exception:
-                messages.error(request, "Could not apply!" +
-                               str(staff.address))
+                messages.error(request, "Could not apply!")
         else:
             messages.error(request, "Form has errors!")
     return render(request, "staff_template/staff_apply_leave.html", context)
@@ -178,8 +177,7 @@ def staff_feedback(request):
                     request, "Feedback submitted for review")
                 return redirect(reverse('staff_feedback'))
             except Exception:
-                messages.error(request, "Could not Send!" +
-                               str(staff.address))
+                messages.error(request, "Could not Submit!")
         else:
             messages.error(request, "Form has errors!")
     return render(request, "staff_template/staff_feedback.html", context)

@@ -36,6 +36,36 @@
                 </li>
           
                 <li class="nav-item">
+                    {% url 'student_view_attendance' as student_view_attendance %}
+                    <a href="{{student_view_attendance}}" class="nav-link {% if student_view_attendance == request.path %} active {% endif %}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>View Attendance</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    {% url 'student_apply_leave' as student_apply_leave %}
+                    <a href="{{student_apply_leave}}" class="nav-link {% if student_apply_leave == request.path %} active {% endif %}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                           Apply For Leave
+
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    {% url 'student_feedback' as student_feedback %}
+                    <a href="{{student_feedback}}" class="nav-link {% if student_feedback == request.path %} active {% endif %}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                           Feedback
+
+                        </p>
+                    </a>
+                </li>
+          
+                <li class="nav-item">
                     <a href="{% url 'user_logout' %}" class="nav-link">
                         <i class="nav-icon fas fa-th"></i>
                         <p>

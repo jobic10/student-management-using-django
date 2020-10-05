@@ -1,0 +1,46 @@
+{% extends 'student_template/base.html' %}
+{% load static %}
+{% block page_title %}Student Feedback{% endblock page_title %}
+
+{% block content %}
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Leave A Feedback Message</h3>
+                    </div>
+
+                    {% include "hod_template/form_template.html" with messages=messages  form=form button_text="Submit Feedback"%}
+                </div>
+                <!-- /.card -->
+<div class="card card-primary">
+    <div class="card-header"><h3 class="card-title">Previously Sent Feedbacks</h3></div>
+   <div class="table p-2">
+
+       <table class="table table-bordered">
+           <tr>
+               <th>ID</th>
+               <th>Feedback</th>
+               <th>Reply</th>
+            <th>Created At</th>
+        </tr>
+        {% for feedback in feedbacks %}
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{feedback.feedback}}</td>
+              <td>{{feedback.reply}}</td>
+              <td>{{feedback.created_at}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

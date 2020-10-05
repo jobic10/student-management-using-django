@@ -1,0 +1,58 @@
+{% extends 'student_template/base.html' %}
+{% load static %}
+{% block page_title %}Student Leave{% endblock page_title %}
+
+{% block content %}
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Student Leave</h3>
+                    </div>
+
+                    {% include "hod_template/form_template.html" with messages=messages  form=form button_text="Apply For Leave"%}
+                </div>
+                <!-- /.card -->
+<div class="card card-primary">
+    <div class="card-header"><h3 class="card-title">Leave Application History</h3></div>
+   <div class="table">
+
+       <table class="table table-bordered">
+           <tr>
+               <th>ID</th>
+               <th>Date</th>
+               <th>Message</th>
+                <th>Status</th>
+        </tr>
+        {% for leave in leave_history %}
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{leave.date}}</td>
+              <td>{{leave.message}}</td>
+              <td>
+                  
+                  {% if leave.status == 0 %}
+                  <span class="badge badge-warning">Pending</span>
+                  {% elif leave.status == 1 %}
+                  <span class="badge badge-success">Accepted</span>
+                  
+                    {% else %}
+                    <span class="badge badge-danger">Rejected</span>
+                    
+                    {% endif %}
+                    
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

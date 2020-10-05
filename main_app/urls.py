@@ -24,6 +24,8 @@ urlpatterns = [
     path("add_staff/", hod_views.add_staff, name='add_staff'),
     path("add_course/", hod_views.add_course, name='add_course'),
     path("add_session/", hod_views.add_session, name='add_session'),
+    path("check_email_availability", hod_views.check_email_availability,
+         name="check_email_availability"),
     path("manage_session/", hod_views.manage_session, name='manage_session'),
     path("edit_session/<int:session_id>",
          hod_views.edit_session, name='edit_session'),
@@ -45,6 +47,7 @@ urlpatterns = [
     path("staff_apply_leave/", staff_views.staff_apply_leave,
          name='staff_apply_leave'),
     path("staff_feedback/", staff_views.staff_feedback, name='staff_feedback'),
+
     path("staff_take_attendance/", staff_views.staff_take_attendance,
          name='staff_take_attendance'),
     path("staff_update_attendance/", staff_views.staff_update_attendance,
@@ -59,5 +62,11 @@ urlpatterns = [
 
     # Student
     path("student_home/", student_views.student_home, name='student_home'),
+    path("student_view_attendance/", student_views.student_view_attendance,
+         name='student_view_attendance'),
+    path("student_apply_leave/", student_views.student_apply_leave,
+         name='student_apply_leave'),
+    path("student_feedback/", student_views.student_feedback,
+         name='student_feedback'),
 
 ]

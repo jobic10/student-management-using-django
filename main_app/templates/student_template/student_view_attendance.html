@@ -1,0 +1,151 @@
+{% extends 'student_template/base.html' %}
+{% load static %}
+{% block page_title %}View Attendance Data{% endblock page_title %}
+{% block custom_css %}
+<style>
+.attendance_div_red{
+    padding: 10px;
+    background: #f44336;
+    border: 3px solid white;
+    text-align: center;
+    color: #fff;
+    border-radius: 30px;
+    box-shadow: 1px 1px 1px grey;
+    margin: 5px;
+}
+.attendance_div_green{
+    padding: 10px;
+    background: #4CAF50;
+    border: 3px solid white;
+    text-align: center;
+    color: #fff;
+    border-radius: 30px;
+    box-shadow: 1px 1px 1px grey;
+    margin: 5px;
+}
+</style>
+{% endblock custom_css %}
+
+{% block content %}
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">View Attendance Data</h3>
+                    </div>
+
+                    {% if messages %}
+                    {% for message in messages  %}
+
+                    <div class="alert-{{message.tags}} alert">
+                        {{message}}
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <div class="card-body">
+
+
+
+                        <div class="form-group">
+                            <label>Select Subject</label>
+                            <select  id="subject" class="form-control">
+                                <option value="">----</option>
+                                {% for subject in subjects  %}
+                                <option value="{{subject.id}}">{{subject.name}} </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>Start Date</label>
+                                    <input type="date" class="form-control" placeholder="Start Date" name="start_date" required id="start_date">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>End Date</label>
+                                    <input type="date" class="form-control" placeholder="End Date" name="end_date"  id="end_date">
+                                </div>
+                            </div>
+                            <button type="button" id="fetch_attendance" class="btn btn-primary btn-block">Fetch
+                                Attendance Data</button>
+               </div>
+
+                    </div>
+                    <!-- /.card-body -->
+
+                    <div class="card-footer">
+                            
+                        <div class="row" id="attendance_data"></div>
+                    </div>
+                </div>
+                <!-- /.card -->
+
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
+
+
+{% block custom_js %}
+<script>
+    $(document).ready(function () {
+
+       
+        $("#fetch_attendance").click(function () {
+            var subject = $("#subject").val()
+            var start_date = $("#start_date").val()
+            var end_date = $("#end_date").val()
+            if (subject.length  == 0 || end_date.length ==0 ||start_date.length == 0){
+                alert("Please Select Subject and Date Range");
+                return false;
+            }
+            $("#attendance_data").html(null)
+            $.ajax({
+                url: "{% url 'student_view_attendance' %}",
+                type: 'POST',
+                data: {
+                    subject: subject,
+                    start_date: start_date,
+                    end_date:end_date
+                }
+            }).done(function (response) {
+                var json_data = JSON.parse(response)
+                if (json_data.length < 1) {
+                    $("#attendance_data").html("<div class='col-md-12 alert alert-danger'>No Data For Specified Parameters</div>")
+
+                } else {
+                    var div_data = ""
+                         
+                    for (key in json_data) {
+                    if (json_data[key]['status']){
+                        div_data += "<div class='col-lg-3 attendance_div_green'><b>"+ json_data[key]['date'] + "</b><br/>Present</div>" 
+                    }else{
+
+                        div_data += "<div class='col-lg-3 attendance_div_red'><b>"+ json_data[key]['date'] + "</b><br/>Absent</div>"
+                    }
+                }
+                    div_data += ""
+                    $("#attendance_data").html(div_data)
+
+                }
+            }).fail(function (response) {
+                $("#attendance_data").html("Error While Fetching Records")
+            })
+
+
+          
+
+        })
+    })
+</script>
+{% endblock custom_js %}

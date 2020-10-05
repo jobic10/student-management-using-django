@@ -7,7 +7,7 @@ This is a Simple Student Management System Developed While Learning Django.
 
 
 
-## Features of this Project
+## Project's Journey
 - [x] Admin/Staff/Student Login
 - [x] Add and Edit Course
 - [x] Add and Edit Staff
@@ -25,8 +25,9 @@ This is a Simple Student Management System Developed While Learning Django.
 - [x] Attendance and Update Attendance
 - [x] Password Reset
 - [x] Apply For Leave
+- [x] Students Can Check Attendance
+- [x] Check Email Availability
 - [ ] Reply to Leave Applications
-- [ ] Check Email Availability
 - [ ] Google CAPTCHA
 - [ ] Upgrade Student/Staff/Admin Dashboard
 - [ ] Change all links to be dynamic
@@ -51,3 +52,4 @@ This is a Simple Student Management System Developed While Learning Django.
 - https://stackoverflow.com/questions/64188313/django-can-i-delete-apps-static-files-after-running-collectstatic/64189244#64189244
 - https://stackoverflow.com/questions/29416478/change-form-field-value-before-saving
 - https://support.google.com/mail/thread/38519529?hl=en
+- https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript

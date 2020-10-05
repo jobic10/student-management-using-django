@@ -1,7 +1,8 @@
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
-from django.shortcuts import (HttpResponseRedirect, get_object_or_404,
+from django.shortcuts import (HttpResponseRedirect, get_object_or_404, HttpResponse,
                               redirect, render)
+from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 from django.views.generic import UpdateView
 
@@ -373,3 +374,16 @@ def edit_session(request, session_id):
 
     else:
         return render(request, "hod_template/edit_session_template.html", context)
+
+
+@csrf_exempt
+def check_email_availability(request):
+    email = request.POST.get("email")
+    try:
+        user = CustomUser.objects.filter(email=email).exists()
+        if user:
+            return HttpResponse(True)
+        return HttpResponse(False)
+    except Exception as e:
+        print("ERRORRR+==============> " + str(e))
+        return HttpResponse(False)
