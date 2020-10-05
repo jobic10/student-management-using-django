@@ -142,7 +142,7 @@ class LeaveReportStaff(models.Model):
 
 class FeedbackStudent(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    feedback = models.CharField(max_length=255)
+    feedback = models.TextField()
     reply = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
@@ -150,7 +150,7 @@ class FeedbackStudent(models.Model):
 
 class FeedbackStaff(models.Model):
     staff = models.ForeignKey(Staff, on_delete=models.CASCADE)
-    feedback = models.CharField(max_length=255)
+    feedback = models.TextField()
     reply = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)

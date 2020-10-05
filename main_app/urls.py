@@ -42,6 +42,9 @@ urlpatterns = [
          hod_views.edit_subject, name='edit_subject'),
     # Staff
     path("staff_home/", staff_views.staff_home, name='staff_home'),
+    path("staff_apply_leave/", staff_views.staff_apply_leave,
+         name='staff_apply_leave'),
+    path("staff_feedback/", staff_views.staff_feedback, name='staff_feedback'),
     path("staff_take_attendance/", staff_views.staff_take_attendance,
          name='staff_take_attendance'),
     path("staff_update_attendance/", staff_views.staff_update_attendance,

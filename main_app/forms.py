@@ -1,6 +1,7 @@
-from .models import *
 from django import forms
-from django.forms.widgets import DateInput
+from django.forms.widgets import DateInput, TextInput
+
+from .models import *
 
 
 class FormSettings(forms.ModelForm):
@@ -105,3 +106,25 @@ class SessionForm(FormSettings):
             'start_year': DateInput(attrs={'type': 'date'}),
             'end_year': DateInput(attrs={'type': 'date'}),
         }
+
+
+class LeaveReportStaffForm(FormSettings):
+    def __init__(self, *args, **kwargs):
+        super(LeaveReportStaffForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = LeaveReportStaff
+        fields = ['date', 'message']
+        widgets = {
+            'date': DateInput(attrs={'type': 'date'}),
+        }
+
+
+class FeedbackStaffForm(FormSettings):
+
+    def __init__(self, *args, **kwargs):
+        super(FeedbackStaffForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = FeedbackStaff
+        fields = ['feedback']

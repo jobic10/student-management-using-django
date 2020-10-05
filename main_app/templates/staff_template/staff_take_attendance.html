@@ -138,6 +138,8 @@ if (subject.length  == 0 || session.length == 0){
                     data: {
                         date: attendance_date,
                         student_ids: student_data,
+                        subject: subject,
+                        session: session
             
                     }
                 }).done(function (response) {

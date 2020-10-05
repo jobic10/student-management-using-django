@@ -97,7 +97,6 @@ def get_attendance(request):
             attendance_list.append(data)
         return JsonResponse(json.dumps(attendance_list), safe=False)
     except Exception as e:
-        print("Error ====> " + str(e))
         return None
 
 
@@ -116,7 +115,6 @@ def get_student_attendance(request):
             student_data.append(data)
         return JsonResponse(json.dumps(student_data), content_type='application/json', safe=False)
     except Exception as e:
-        print("ERROR==============>" + str(e))
         return e
 
 
@@ -131,7 +129,6 @@ def update_attendance(request):
         for student_dict in students:
             student = get_object_or_404(
                 Student, admin_id=student_dict.get('id'))
-            print("lllll MESSAGE==========> " + str(student_data))
             attendance_report = get_object_or_404(
                 AttendanceReport, student=student, attendance=attendance)
             attendance_report.status = student_dict.get('status')
@@ -140,3 +137,49 @@ def update_attendance(request):
         return None
 
     return HttpResponse("OK")
+
+
+def staff_apply_leave(request):
+    form = LeaveReportStaffForm(request.POST or None)
+    staff = get_object_or_404(Staff, admin_id=request.user.id)
+    context = {
+        'form': form,
+        'leave_history': LeaveReportStaff.objects.filter(staff=staff)}
+    if request.method == 'POST':
+        if form.is_valid():
+            try:
+                obj = form.save(commit=False)
+                obj.staff = staff
+                obj.save()
+                messages.success(
+                    request, "Application for leave has been submitted for review")
+                return redirect(reverse('staff_apply_leave'))
+            except Exception:
+                messages.error(request, "Could not apply!" +
+                               str(staff.address))
+        else:
+            messages.error(request, "Form has errors!")
+    return render(request, "staff_template/staff_apply_leave.html", context)
+
+
+def staff_feedback(request):
+    form = FeedbackStaffForm(request.POST or None)
+    staff = get_object_or_404(Staff, admin_id=request.user.id)
+    context = {
+        'form': form,
+        'feedbacks': FeedbackStaff.objects.filter(staff=staff)}
+    if request.method == 'POST':
+        if form.is_valid():
+            try:
+                obj = form.save(commit=False)
+                obj.staff = staff
+                obj.save()
+                messages.success(
+                    request, "Feedback submitted for review")
+                return redirect(reverse('staff_feedback'))
+            except Exception:
+                messages.error(request, "Could not Send!" +
+                               str(staff.address))
+        else:
+            messages.error(request, "Form has errors!")
+    return render(request, "staff_template/staff_feedback.html", context)
