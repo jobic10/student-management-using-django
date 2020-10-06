@@ -15,7 +15,7 @@
                 <img src="{% static 'dist/img/user2-160x160.jpg' %} " class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="#" class="d-block">{{ user}}</a>
+                <a href="#" class="d-block">{{user}}</a>
             </div>
         </div>
 
@@ -29,6 +29,16 @@
                         <i class="nav-icon fas fa-th"></i>
                         <p>
                             Home
+
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    {% url 'view_profile' as view_profile %}
+                    <a href="{{view_profile}}" class="nav-link {% if view_profile == request.path %} active {% endif %}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            View/Edit Profile
 
                         </p>
                     </a>
@@ -134,59 +144,69 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    {% url 'manage_session' as manage_session %}
-                    {% url 'edit_session' session.id as edit_session %}
-                    <a href="{{manage_session}}"
-                        class="nav-link  {% if edit_session == request.path or manage_session == request.path %} active {% endif %}">
-                        <i class="nav-icon fas fa-th"></i>
-                        <p>
-                            Manage Session
+                {% url 'manage_session' as manage_session %}
+                {% url 'edit_session' session.id as edit_session %}
+                <a href="{{manage_session}}"
+                    class="nav-link  {% if edit_session == request.path or manage_session == request.path %} active {% endif %}">
+                    <i class="nav-icon fas fa-th"></i>
+                    <p>
+                        Manage Session
 
+                    </p>
+                </a>
+        </li>
+                <li class="nav-item">
+                    {% url 'admin_view_attendance' as admin_view_attendance %}
+
+                    <li class="nav-item">
+                        <a href="{{admin_view_attendance}}" class="nav-link  {% if admin_view_attendance == request.path %} active {% endif %}">
+                            <i class="nav-icon fas fa-th"></i>
+                            <p>
+                                View Attendance
+                            </p>
+                        </a>
+                    </li>  
+            <li class="nav-item">
+                {% url 'student_feedback_message' as student_feedback_message %}
+
+                <a href="{{ student_feedback_message }}" class="nav-link  {% if student_feedback_message == request.path %} active {% endif %}">
+                    <i class="nav-icon fas fa-th"></i>
+                    <p>
+                        Student Feedback
+                            
                         </p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url 'add_staff' %}" class="nav-link">
-                        <i class="nav-icon fas fa-th"></i>
-                        <p>
-                            View Attendance
-                            <span class="right badge badge-danger">New</span>
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'add_staff' %}" class="nav-link">
-                        <i class="nav-icon fas fa-th"></i>
-                        <p>
-                            Student Feedback
-                            <span class="right badge badge-danger">New</span>
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'add_staff' %}" class="nav-link">
+                {% url 'staff_feedback_message' as staff_feedback_message %}
+
+                    <a href="{{staff_feedback_message}}" class="nav-link   {% if staff_feedback_message == request.path %} active {% endif %}">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
                             Staff Feedback
-                            <span class="right badge badge-danger">New</span>
+                            
                         </p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url 'add_staff' %}" class="nav-link">
-                        <i class="nav-icon fas fa-th"></i>
-                        <p>
-                            Student Leave
-                            <span class="right badge badge-danger">New</span>
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'add_staff' %}" class="nav-link">
+                {% url 'view_staff_leave' as view_staff_leave %}
+
+                    <a href="{{view_staff_leave}}" class="nav-link  {% if view_staff_leave == request.path %} active {% endif %}">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
                             Staff Leave
-                            <span class="right badge badge-danger">New</span>
+                            
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                {% url 'view_student_leave' as view_student_leave %}
+
+                    <a href="{% url 'view_student_leave' %}" class="nav-link  {% if view_student_leave == request.path %} active {% endif %}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Student Leave
+                            
                         </p>
                     </a>
                 </li>
@@ -195,7 +215,7 @@
                         <i class="nav-icon fas fa-th"></i>
                         <p>
                             Logout
-                            <span class="right badge badge-danger">New</span>
+                            
                         </p>
                     </a>
                 </li>

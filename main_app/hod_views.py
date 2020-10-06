@@ -1,11 +1,13 @@
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
-from django.shortcuts import (HttpResponseRedirect, get_object_or_404, HttpResponse,
-                              redirect, render)
-from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import (HttpResponse, HttpResponseRedirect,
+                              get_object_or_404, redirect, render)
 from django.urls import reverse
-from django.views.generic import UpdateView
+from django.http import HttpResponse, JsonResponse
 
+from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import UpdateView
+import json
 from .forms import *
 from .models import *
 
@@ -385,5 +387,128 @@ def check_email_availability(request):
             return HttpResponse(True)
         return HttpResponse(False)
     except Exception as e:
-        print("ERRORRR+==============> " + str(e))
         return HttpResponse(False)
+
+
+@csrf_exempt
+def student_feedback_message(request):
+    if request.method != 'POST':
+        feedbacks = FeedbackStudent.objects.all()
+        context = {
+            'feedbacks': feedbacks
+        }
+        return render(request, 'hod_template/student_feedback_template.html', context)
+    else:
+        feedback_id = request.POST.get('id')
+        try:
+            feedback = get_object_or_404(FeedbackStudent, id=feedback_id)
+            reply = request.POST.get('reply')
+            feedback.reply = reply
+            feedback.save()
+            return HttpResponse(True)
+        except Exception as e:
+            return HttpResponse(False)
+
+
+@csrf_exempt
+def staff_feedback_message(request):
+    if request.method != 'POST':
+        feedbacks = FeedbackStaff.objects.all()
+        context = {
+            'feedbacks': feedbacks
+        }
+        return render(request, 'hod_template/staff_feedback_template.html', context)
+    else:
+        feedback_id = request.POST.get('id')
+        try:
+            feedback = get_object_or_404(FeedbackStaff, id=feedback_id)
+            reply = request.POST.get('reply')
+            feedback.reply = reply
+            feedback.save()
+            return HttpResponse(True)
+        except Exception as e:
+            return HttpResponse(False)
+
+
+@csrf_exempt
+def view_staff_leave(request):
+    if request.method != 'POST':
+        allLeave = LeaveReportStaff.objects.all()
+        context = {
+            'allLeave': allLeave
+        }
+        return render(request, "hod_template/staff_leave_view.html", context)
+    else:
+        id = request.POST.get('id')
+        status = request.POST.get('status')
+        if (status == '1'):
+            status = 1
+        else:
+            status = -1
+        try:
+            leave = get_object_or_404(LeaveReportStaff, id=id)
+            leave.status = status
+            leave.save()
+            return HttpResponse(True)
+        except Exception as e:
+            return False
+
+
+@csrf_exempt
+def view_student_leave(request):
+    if request.method != 'POST':
+        allLeave = LeaveReportStudent.objects.all()
+        context = {
+            'allLeave': allLeave
+        }
+        return render(request, "hod_template/student_leave_view.html", context)
+    else:
+        id = request.POST.get('id')
+        status = request.POST.get('status')
+        if (status == '1'):
+            status = 1
+        else:
+            status = -1
+        try:
+            leave = get_object_or_404(LeaveReportStudent, id=id)
+            leave.status = status
+            leave.save()
+            return HttpResponse(True)
+        except Exception as e:
+            return False
+
+
+def admin_view_attendance(request):
+    subjects = Subject.objects.all()
+    sessions = Session.objects.all()
+    context = {
+        'subjects': subjects,
+        'sessions': sessions
+    }
+
+    return render(request, "hod_template/admin_view_attendance.html", context)
+
+
+@csrf_exempt
+def get_admin_attendance(request):
+    subject_id = request.POST.get('subject')
+    session_id = request.POST.get('session')
+    attendance_date_id = request.POST.get('attendance_date_id')
+    try:
+        subject = get_object_or_404(Subject, id=subject_id)
+        session = get_object_or_404(Session, id=session_id)
+        attendance = get_object_or_404(
+            Attendance, id=attendance_date_id, session=session)
+        attendance_reports = AttendanceReport.objects.filter(
+            attendance=attendance)
+        json_data = []
+        for report in attendance_reports:
+            data = {
+                "status":  str(report.status),
+                "name": str(report.student)
+            }
+            json_data.append(data)
+        return JsonResponse(json.dumps(json_data), safe=False)
+    except Exception as e:
+        print("Error ====== > " + str(e))
+        return None

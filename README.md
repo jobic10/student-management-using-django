@@ -27,10 +27,12 @@ This is a Simple Student Management System Developed While Learning Django.
 - [x] Apply For Leave
 - [x] Students Can Check Attendance
 - [x] Check Email Availability
-- [ ] Reply to Leave Applications
-- [ ] Google CAPTCHA
+- [x] Reply to Leave Applications
+- [x] Reply to Feedback
+- [x] Admin View Attendance
 - [ ] Upgrade Student/Staff/Admin Dashboard
 - [ ] Change all links to be dynamic
+- [ ] Google CAPTCHA
 - [ ] Code Restructure - Very Important
 - [ ] Others 
 

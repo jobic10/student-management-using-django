@@ -1,0 +1,143 @@
+{% extends 'hod_template/base.html' %}
+{% load static %}
+{% block page_title %}View Student Leave Applications{% endblock page_title %}
+
+{% block content %}
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Student Leave </h3>
+                    </div>
+
+                    <div class="table card-body">
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>SN</th>
+                                <th>Student</th>
+                                <th>Course</th>
+                                <th>Message</th>
+                                <th>Leave Date</th>
+                                <th>Submitted On</th>
+                                <th>Action</th>
+
+                            </tr>
+                            {% for leave in  allLeave %}
+                              <tr>
+                                  <td>{{forloop.counter}}</td>
+                                  <td>{{leave.student}}</td>
+                                  <td>{{leave.student.course}}</td>
+                                  <td>{{leave.message}}</td>
+                                  <td>{{leave.date}}</td>
+                                  <td>{{leave.created_at}}</td>
+                                 
+                                      
+                                      {% if leave.status == 0 %}
+                                           <td> <button data-toggle = "modal" data-target = "#reply_modal" value="{{leave.id}}" class="btn btn-primary reply_open_modal">Reply</button>
+{% elif leave.status == -1 %}
+<td><span  class='badge badge-danger'>Rejected</span></td>
+{% else %}
+<td><span  class='badge badge-success'>Approved</span></td>
+
+                                            <td>{{feedback.updated_at}}</td>
+                                      {% endif %}
+                                          
+                                  </td>
+                       
+                              </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                    </div>
+                <!-- /.card -->
+
+            </div>
+        </div>
+    </div>
+</section>
+<div class = "modal fade" id = "reply_modal" tabindex = "-1" role = "dialog" 
+   aria-labelledby = "myModalLabel" aria-hidden = "true">
+   
+   <div class = "modal-dialog">
+      <div class = "modal-content">
+         
+         <div class = "modal-header">
+            <button type = "button" class = "close" data-dismiss = "modal" aria-hidden = "true">
+                  &times;
+            </button>
+            
+            <h4 class = "modal-title" id = "myModalLabel">
+               
+            </h4>
+         </div>
+         
+         <div class = "modal-body">
+             <input type="hidden"  id="id">
+           <p> Reply To <span id="reply_name"></span>'s Leave Request</p>  
+           <select id="reply_leave_status" class="form-control">
+<option value="">-- Select --</option>
+<option value="1">Approve</option>
+<option value="-1">Reject</option>
+           </select>
+        </div>
+        
+        <div class = "modal-footer">
+            <button type = "button" class = "btn btn-default" data-dismiss = "modal">
+                Close
+            </button>
+            
+            <button id="reply_btn" class="btn btn-success btn-block">Submit</button>
+         
+         </div>
+         
+      </div><!-- /.modal-content -->
+   </div><!-- /.modal-dialog -->
+  
+</div><!-- /.modal -->
+{% endblock content %}
+{% block custom_js %}
+  <script>
+      $(document).ready(function(){
+          $(".reply_open_modal").click(function(){
+              var id = $(this).val()
+              var name = $(this).parents("tr").children("td:eq(1)").text()
+              $("#reply_name").text(name)
+              $("#id").val(id)
+              
+              
+            })
+            
+            $("#reply_btn").on("click", function(){
+                var id = $("#id").val()
+                var status = $("#reply_leave_status").val()
+                if (status == '1' || status == '-1'){
+
+    $.ajax({
+        url: "{% url 'view_student_leave' %}",
+        type:'POST',
+        data:{
+              id:id,
+              status:status
+        }
+    }).done(function(response){
+        if (response == "True"){
+            alert("Leave Response Has Been Saved!")
+            location.reload()
+        }else{
+            alert("Reply Could Not Be Sent")
+        }
+    }).fail(function(response){
+        alert("Error Occured. ")
+    })
+}else{
+    alert("Choose valid response")
+}
+
+          })
+      })
+  </script>
+{% endblock custom_js %}

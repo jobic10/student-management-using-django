@@ -1,0 +1,130 @@
+{% extends 'hod_template/base.html' %}
+{% load static %}
+{% block page_title %}Staff Feedback{% endblock page_title %}
+
+{% block content %}
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Staff Feedback</h3>
+                    </div>
+
+                    <div class="table card-body">
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>SN</th>
+                                <th>Staff</th>
+                                <th>Course</th>
+                                <th>Message</th>
+                                <th>Sent On</th>
+                                <th>Replied On</th>
+                                <th>Reply</th>
+                            </tr>
+                            {% for feedback in  feedbacks %}
+                              <tr>
+                                  <td>{{forloop.counter}}</td>
+                                  <td>{{feedback.staff}}</td>
+                                  <td>{{feedback.staff.course}}</td>
+                                  <td>{{feedback.feedback}}</td>
+                                      
+                                            
+                                    {% if feedback.reply == "" %}
+                                    <td>{{feedback.created_at}}</td>
+                                    <td><span  class='badge badge-warning'>Pending Response</span></td>
+                                         <td> <button data-toggle = "modal" data-target = "#reply_modal" value="{{feedback.id}}" class="btn btn-primary reply_open_modal">Reply</button>
+                                        {% else %}
+                                        <td>{{feedback.created_at}}</td>
+                                        <td>{{feedback.updated_at}}</td>
+                                          <td>{{feedback.reply}}</td>
+                                    {% endif %}
+                                  </td>
+                       
+                              </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                    </div>
+                <!-- /.card -->
+
+            </div>
+        </div>
+    </div>
+</section>
+<div class = "modal fade" id = "reply_modal" tabindex = "-1" role = "dialog" 
+   aria-labelledby = "myModalLabel" aria-hidden = "true">
+   
+   <div class = "modal-dialog">
+      <div class = "modal-content">
+         
+         <div class = "modal-header">
+            <button type = "button" class = "close" data-dismiss = "modal" aria-hidden = "true">
+                  &times;
+            </button>
+            
+            <h4 class = "modal-title" id = "myModalLabel">
+               
+            </h4>
+         </div>
+         
+         <div class = "modal-body">
+             <input type="hidden"  id="id">
+           <p> Reply <span id="reply_name"></span></p>  
+           <textarea name="reply_message" id="reply_message" cols="30" rows="10" class="form-control"></textarea>
+        </div>
+        
+        <div class = "modal-footer">
+            <button type = "button" class = "btn btn-default" data-dismiss = "modal">
+                Close
+            </button>
+            
+            <button id="reply_btn" class="btn btn-success btn-block">Reply</button>
+         
+         </div>
+         
+      </div><!-- /.modal-content -->
+   </div><!-- /.modal-dialog -->
+  
+</div><!-- /.modal -->
+{% endblock content %}
+{% block custom_js %}
+  <script>
+      $(document).ready(function(){
+          $(".reply_open_modal").click(function(){
+              var id = $(this).val()
+              var name = $(this).parents("tr").children("td:eq(1)").text()
+              $("#reply_name").text(name)
+              $("#id").val(id)
+              
+              
+            })
+            
+            $("#reply_btn").on("click", function(){
+                var id = $("#id").val()
+                var reply = $("#reply_message").val()
+
+                $.ajax({
+                    url: "{% url 'staff_feedback_message' %}",
+                    type:'POST',
+                    data:{
+                          id:id,
+                          reply:reply
+                    }
+                }).done(function(response){
+                    if (response == "True"){
+                        alert("Reply Sent")
+                        location.reload()
+                    }else{
+                        alert("Reply Could Not Be Sent")
+                    }
+                }).fail(function(response){
+                    alert("Error Occured. ")
+                })
+          })
+      })
+  </script>
+{% endblock custom_js %}
