@@ -30,7 +30,7 @@ This is a Simple Student Management System Developed While Learning Django.
 - [x] Reply to Leave Applications
 - [x] Reply to Feedback
 - [x] Admin View Attendance
-- [x] Password Change for Admin, Staff and Students using *set_password*
+- [x] Password Change for Admin, Staff and Students using *set_password()*
 - [x] Admin Profile Edit
 - [x] Staff Profile Edit
 - [x] Student Profile Edit
