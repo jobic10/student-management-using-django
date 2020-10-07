@@ -1,0 +1,39 @@
+{% extends 'staff_template/base.html' %}
+{% load static %}
+{% block page_title %}View/Edit Profile{% endblock page_title %}
+
+{% block content %}
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">View/Edit Profile</h3>
+                    </div>
+
+                    {% include "hod_template/form_template.html" with messages=messages  form=form button_text="Update Profile"%}
+                </div>
+                <!-- /.card -->
+
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
+
+{% block custom_js %}
+  <script>
+      $(document).ready(function(){
+            var ifNotfied = false;
+          $("#id_password").on("change", function(){
+              if (!ifNotfied){
+                ifNotfied = true;
+                alert("After a successful profile update:\n\nYour session would be terminated\nYou would be required to login again")
+              }
+          })
+      })
+  </script>
+{% endblock custom_js %}

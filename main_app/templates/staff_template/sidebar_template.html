@@ -34,6 +34,16 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    {% url 'staff_view_profile' as staff_view_profile %}
+                    <a href="{{staff_view_profile}}" class="nav-link {% if staff_view_profile == request.path %} active {% endif %}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            View/Edit Profile
+
+                        </p>
+                    </a>
+                </li>
 
                 <li class="nav-item">
                     {% url 'staff_take_attendance' as staff_take_attendance %}

@@ -32,9 +32,14 @@ This is a Simple Student Management System Developed While Learning Django.
 - [x] Admin View Attendance
 - [x] Password Change for Admin, Staff and Students using *set_password*
 - [x] Admin Profile Edit
-- [ ] Upgrade Student/Staff/Admin Dashboard
-- [ ] Change all links to be dynamic
+- [x] Staff Profile Edit
+- [x] Student Profile Edit
+- [ ] Modify Student/Staff/Admin Dashboard
+- [ ] Firebase Web Push Notifications
+- [ ] Staff Add Student's Result
+- [ ] Student View Result
 - [ ] Google CAPTCHA
+- [ ] Change all links to be dynamic
 - [ ] Code Restructure - Very Important
 - [ ] Others 
 

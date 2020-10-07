@@ -2,6 +2,7 @@ import json
 from datetime import datetime
 
 from django.contrib import messages
+from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import (HttpResponseRedirect, get_object_or_404,
                               redirect, render)
@@ -91,3 +92,44 @@ def student_feedback(request):
         else:
             messages.error(request, "Form has errors!")
     return render(request, "student_template/student_feedback.html", context)
+
+
+def student_view_profile(request):
+    student = get_object_or_404(Student, admin=request.user)
+    form = StudentEditForm(request.POST or None,
+                           instance=student, user=request.user.admin.type)
+    context = {'form': form}
+    if request.method == 'POST':
+        try:
+            if form.is_valid():
+                first_name = form.cleaned_data.get('first_name')
+                last_name = form.cleaned_data.get('last_name')
+                password = form.cleaned_data.get('password') or None
+                address = form.cleaned_data.get('address')
+                gender = form.cleaned_data.get('gender')
+                passport = request.FILES.get('profile_pic') or None
+                admin = student.admin
+                if password != None:
+                    admin.set_password(password)
+                if passport != None:
+                    fs = FileSystemStorage()
+                    filename = fs.save(passport.name, passport)
+                    passport_url = fs.url(filename)
+                    student.profile_pic = passport_url
+                admin.first_name = first_name
+                admin.last_name = last_name
+                student.address = address
+                student.gender = gender
+                admin.save()
+                student.save()
+                messages.success(request, "Profile Updated!")
+                return redirect(reverse('student_view_profile'))
+            else:
+                messages.error(request, "Invalid Data Provided")
+                return render(request, "student_template/student_view_profile.html", context)
+        except Exception as e:
+            messages.error(
+                request, "Error Occured While Updating Profile " + str(e))
+            return render(request, "student_template/student_view_profile.html", context)
+
+    return render(request, "student_template/student_view_profile.html", context)

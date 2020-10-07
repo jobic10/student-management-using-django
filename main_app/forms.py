@@ -29,6 +29,8 @@ class CustomUserForm(FormSettings):
             self.fields['password'].required = False
             for field in CustomUserForm.Meta.fields:
                 self.fields[field].initial = instance.get(field)
+            if self.instance.pk is not None:
+                self.fields['password'].widget.attrs['placeholder'] = "Fill this only if you wish to update password"
 
     def clean_email(self, *args, **kwargs):
         formEmail = self.cleaned_data['email'].lower()
@@ -155,3 +157,23 @@ class FeedbackStudentForm(FormSettings):
     class Meta:
         model = FeedbackStudent
         fields = ['feedback']
+
+
+class StudentEditForm(CustomUserForm):
+    def __init__(self, *args, **kwargs):
+        super(StudentEditForm, self).__init__(*args, **kwargs)
+
+    class Meta(CustomUserForm.Meta):
+        model = Student
+        fields = CustomUserForm.Meta.fields + \
+            ['gender', 'address', 'profile_pic']
+
+
+class StaffEditForm(CustomUserForm):
+    def __init__(self, *args, **kwargs):
+        super(StaffEditForm, self).__init__(*args, **kwargs)
+
+    class Meta(CustomUserForm.Meta):
+        model = Staff
+        fields = CustomUserForm.Meta.fields + \
+            ['gender', 'address', 'profile_pic']

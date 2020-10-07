@@ -178,8 +178,8 @@ def manage_subject(request):
 
 
 def edit_staff(request, staff_id):
-    instance = get_object_or_404(Staff, id=staff_id)
-    form = StaffForm(request.POST or None, instance=instance)
+    staff = get_object_or_404(Staff, id=staff_id)
+    form = StaffForm(request.POST or None, instance=staff)
     context = {
         'form': form
     }
@@ -195,7 +195,6 @@ def edit_staff(request, staff_id):
             course = form.cleaned_data.get('course')
             passport = request.FILES.get('profile_pic') or None
             try:
-                staff = Staff.objects.get(id=staff_id)
                 user = CustomUser.objects.get(id=staff.admin.id)
                 user.username = username
                 user.email = email
@@ -228,8 +227,8 @@ def edit_staff(request, staff_id):
 
 
 def edit_student(request, student_id):
-    instance = get_object_or_404(Student, id=student_id)
-    form = StudentForm(request.POST or None, instance=instance)
+    student = get_object_or_404(Student, id=student_id)
+    form = StudentForm(request.POST or None, instance=student)
     context = {
         'form': form
     }
@@ -246,7 +245,6 @@ def edit_student(request, student_id):
             session = form.cleaned_data.get('session')
             passport = request.FILES.get('profile_pic') or None
             try:
-                student = Student.objects.get(id=student_id)
                 if passport != None:
                     fs = FileSystemStorage()
                     filename = fs.save(passport.name, passport)
