@@ -25,6 +25,8 @@ urlpatterns = [
     path("add_staff/", hod_views.add_staff, name='add_staff'),
     path("add_course/", hod_views.add_course, name='add_course'),
     path("add_session/", hod_views.add_session, name='add_session'),
+    path("admin_view_profile", hod_views.admin_view_profile,
+         name='admin_view_profile'),
     path("check_email_availability", hod_views.check_email_availability,
          name="check_email_availability"),
     path("manage_session/", hod_views.manage_session, name='manage_session'),

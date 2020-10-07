@@ -52,7 +52,7 @@ class CustomUser(AbstractUser):
         return self.last_name + ", " + self.first_name
 
 
-class AdminHOD(models.Model):
+class Admin(models.Model):
     admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

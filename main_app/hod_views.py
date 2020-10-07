@@ -1,13 +1,14 @@
+import json
+
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import (HttpResponse, HttpResponseRedirect,
                               get_object_or_404, redirect, render)
 from django.urls import reverse
-from django.http import HttpResponse, JsonResponse
-
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import UpdateView
-import json
+
 from .forms import *
 from .models import *
 
@@ -199,7 +200,7 @@ def edit_staff(request, staff_id):
                 user.username = username
                 user.email = email
                 if password != None:
-                    user.admin.password = password
+                    user.set_password(password)
                 if passport != None:
                     fs = FileSystemStorage()
                     filename = fs.save(passport.name, passport)
@@ -255,7 +256,7 @@ def edit_student(request, student_id):
                 user.username = username
                 user.email = email
                 if password != None:
-                    user.admin.password = password
+                    user.set_password(password)
                 user.first_name = first_name
                 user.last_name = last_name
                 student.session = session
@@ -510,5 +511,34 @@ def get_admin_attendance(request):
             json_data.append(data)
         return JsonResponse(json.dumps(json_data), safe=False)
     except Exception as e:
-        print("Error ====== > " + str(e))
         return None
+
+
+def admin_view_profile(request):
+    admin = get_object_or_404(Admin, admin=request.user)
+    form = AdminForm(request.POST or None, instance=admin)
+    context = {'form': form}
+    if request.method == 'POST':
+        try:
+            if form.is_valid():
+                first_name = form.cleaned_data.get('first_name')
+                last_name = form.cleaned_data.get('last_name')
+                email = form.cleaned_data.get('email')
+                password = form.cleaned_data.get('password')
+                user = CustomUser.objects.get(id=admin.id)
+                if password != None:
+                    user.set_password(password)
+                user.first_name = first_name
+                user.last_name = last_name
+                user.save()
+                messages.success(request, "Profile Updated!")
+                return redirect(reverse('admin_view_profile'))
+            else:
+                messages.error(request, "Invalid Data Provided")
+                return render(request, "hod_template/admin_view_profile.html", context)
+        except Exception as e:
+            messages.error(
+                request, "Error Occured While Updating Profile " + str(e))
+            return render(request, "hod_template/admin_view_profile.html", context)
+
+    return render(request, "hod_template/admin_view_profile.html", context)

@@ -34,8 +34,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    {% url 'view_profile' as view_profile %}
-                    <a href="{{view_profile}}" class="nav-link {% if view_profile == request.path %} active {% endif %}">
+                    {% url 'admin_view_profile' as admin_view_profile %}
+                    <a href="{{admin_view_profile}}" class="nav-link {% if admin_view_profile == request.path %} active {% endif %}">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
                             View/Edit Profile

@@ -23,13 +23,15 @@ This is a Simple Student Management System Developed While Learning Django.
 - [x] Model Forms for all
 - [x] Views Permission (MiddleWareMixin)
 - [x] Attendance and Update Attendance
-- [x] Password Reset
+- [x] Password Reset Via Email
 - [x] Apply For Leave
 - [x] Students Can Check Attendance
 - [x] Check Email Availability
 - [x] Reply to Leave Applications
 - [x] Reply to Feedback
 - [x] Admin View Attendance
+- [x] Password Change for Admin, Staff and Students using *set_password*
+- [x] Admin Profile Edit
 - [ ] Upgrade Student/Staff/Admin Dashboard
 - [ ] Change all links to be dynamic
 - [ ] Google CAPTCHA

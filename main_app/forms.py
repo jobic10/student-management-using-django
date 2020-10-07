@@ -21,6 +21,15 @@ class CustomUserForm(FormSettings):
         'password': forms.PasswordInput()
     }
 
+    def __init__(self, *args, **kwargs):
+        super(CustomUserForm, self).__init__(*args, **kwargs)
+
+        if kwargs.get('instance'):
+            instance = kwargs.get('instance').admin.__dict__
+            self.fields['password'].required = False
+            for field in CustomUserForm.Meta.fields:
+                self.fields[field].initial = instance.get(field)
+
     def clean_email(self, *args, **kwargs):
         formEmail = self.cleaned_data['email'].lower()
         if self.instance.pk is None:  # Insert
@@ -37,15 +46,6 @@ class CustomUserForm(FormSettings):
 
         return formEmail
 
-    def __init__(self, *args, **kwargs):
-        super(CustomUserForm, self).__init__(*args, **kwargs)
-
-        if kwargs.get('instance'):
-            instance = kwargs.get('instance').admin.__dict__
-            self.fields['password'].required = False
-            for field in CustomUserForm.Meta.fields:
-                self.fields[field].initial = instance.get(field)
-
     class Meta:
         model = CustomUser
         fields = ['first_name', 'last_name', 'email', 'password', ]
@@ -60,10 +60,15 @@ class StudentForm(CustomUserForm):
         fields = CustomUserForm.Meta.fields + \
             ['course', 'gender', 'address', 'profile_pic',
                 'session']
-        # widgets = {
-        #     'session_start_year': DateInput(attrs={'type': 'date'}),
-        #     'session_end_year': DateInput(attrs={'type': 'date'}),
-        # }
+
+
+class AdminForm(CustomUserForm):
+    def __init__(self, *args, **kwargs):
+        super(AdminForm, self).__init__(*args, **kwargs)
+
+    class Meta(CustomUserForm.Meta):
+        model = Admin
+        fields = CustomUserForm.Meta.fields
 
 
 class StaffForm(CustomUserForm):
