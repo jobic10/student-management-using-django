@@ -98,11 +98,10 @@ class Staff(models.Model):
 
 class Subject(models.Model):
     name = models.CharField(max_length=120)
-    created_at = models.DateTimeField(auto_now_add=True)
-    staff = models.ForeignKey(
-        CustomUser, on_delete=models.CASCADE, limit_choices_to={'user_type': 2})
-    updated_at = models.DateTimeField(auto_now=True)
+    staff = models.ForeignKey(Staff, on_delete=models.CASCADE, )
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
 class Attendance(models.Model):

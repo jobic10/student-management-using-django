@@ -34,7 +34,7 @@ This is a Simple Student Management System Developed While Learning Django.
 - [x] Student Profile Edit
 - [x] Student Dashboard Fixed
 - [x] Passing Page Title From View To Follow *DRY* a bit
-- [ ] Staff Dashboard Fixed
+- [x] Staff Dashboard Fixed
 - [ ] Admin Dashboard Fixed
 - [ ] Firebase Web Push Notifications
 - [ ] Staff Add Student's Result
