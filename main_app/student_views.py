@@ -20,7 +20,7 @@ def student_home(request):
     total_present = AttendanceReport.objects.filter(
         student=student, status=True).count()
     if total_attendance == 0:  # Don't divide. DivisionByZero
-        percent_absent, percent_present = 0
+        percent_absent = percent_present = 0
     else:
         percent_present = math.floor((total_present/total_attendance) * 100)
         percent_absent = math.ceil(100 - percent_present)
@@ -45,7 +45,8 @@ def student_home(request):
         'subjects': subjects,
         'data_present': data_present,
         'data_absent': data_absent,
-        'data_name': subject_name
+        'data_name': subject_name,
+        'page_title': 'Student Homepage'
 
     }
     return render(request, 'student_template/home_content.html', context)
@@ -57,7 +58,8 @@ def student_view_attendance(request):
     if request.method != 'POST':
         course = get_object_or_404(Course, id=student.course.id)
         context = {
-            'subjects': Subject.objects.filter(course=course)
+            'subjects': Subject.objects.filter(course=course),
+            'page_title': 'View Attendance'
         }
         return render(request, 'student_template/student_view_attendance.html', context)
     else:
@@ -89,7 +91,9 @@ def student_apply_leave(request):
     student = get_object_or_404(Student, admin_id=request.user.id)
     context = {
         'form': form,
-        'leave_history': LeaveReportStudent.objects.filter(student=student)}
+        'leave_history': LeaveReportStudent.objects.filter(student=student),
+        'page_title': 'Apply for leave'
+    }
     if request.method == 'POST':
         if form.is_valid():
             try:
@@ -111,7 +115,10 @@ def student_feedback(request):
     student = get_object_or_404(Student, admin_id=request.user.id)
     context = {
         'form': form,
-        'feedbacks': FeedbackStudent.objects.filter(student=student)}
+        'feedbacks': FeedbackStudent.objects.filter(student=student),
+        'page_title': 'Student Feedback'
+
+    }
     if request.method == 'POST':
         if form.is_valid():
             try:
@@ -131,8 +138,10 @@ def student_feedback(request):
 def student_view_profile(request):
     student = get_object_or_404(Student, admin=request.user)
     form = StudentEditForm(request.POST or None,
-                           instance=student, user=request.user.admin.type)
-    context = {'form': form}
+                           instance=student)
+    context = {'form': form,
+               'page_title': 'View/Edit Profile'
+               }
     if request.method == 'POST':
         try:
             if form.is_valid():
@@ -149,7 +158,7 @@ def student_view_profile(request):
                     fs = FileSystemStorage()
                     filename = fs.save(passport.name, passport)
                     passport_url = fs.url(filename)
-                    student.profile_pic = passport_url
+                    admin.profile_pic = passport_url
                 admin.first_name = first_name
                 admin.last_name = last_name
                 student.address = address

@@ -14,12 +14,15 @@ from .models import *
 
 
 def admin_home(request):
-    return render(request, 'hod_template/home_content.html')
+    context = {
+        'page_title': "Administrative Dashboard"
+    }
+    return render(request, 'hod_template/home_content.html', context)
 
 
 def add_staff(request):
     form = StaffForm(request.POST or None, request.FILES or None)
-    context = {'form': form}
+    context = {'form': form, 'page_title': 'Add Staff'}
     if request.method == 'POST':
         if form.is_valid():
             first_name = form.cleaned_data.get('first_name')
@@ -35,10 +38,9 @@ def add_staff(request):
             passport_url = fs.url(filename)
             try:
                 user = CustomUser.objects.create_user(
-                    email=email, password=password, user_type=2, first_name=first_name, last_name=last_name)
+                    email=email, password=password, user_type=2, first_name=first_name, last_name=last_name, profile_pic=passport_url)
                 user.staff.gender = gender
                 user.staff.address = address
-                user.staff.profile_pic = passport_url
                 user.staff.course = course
                 user.save()
                 messages.success(request, "Successfully Added")
@@ -56,7 +58,7 @@ def add_staff(request):
 
 def add_student(request):
     student_form = StudentForm(request.POST or None, request.FILES or None)
-    context = {'form': student_form}
+    context = {'form': student_form, 'page_title': 'Add Student'}
     if request.method == 'POST':
         if student_form.is_valid():
             first_name = student_form.cleaned_data.get('first_name')
@@ -73,10 +75,9 @@ def add_student(request):
             passport_url = fs.url(filename)
             try:
                 user = CustomUser.objects.create_user(
-                    email=email, password=password, user_type=3, first_name=first_name, last_name=last_name)
+                    email=email, password=password, user_type=3, first_name=first_name, last_name=last_name, profile_pic=passport_url)
                 user.student.gender = gender
                 user.student.address = address
-                user.student.profile_pic = passport_url
                 user.student.session = session
                 user.student.course = course
                 user.save()
@@ -94,7 +95,8 @@ def add_student(request):
 def add_course(request):
     form = CourseForm(request.POST or None)
     context = {
-        'form': form
+        'form': form,
+        'page_title': 'Add Course'
     }
     if request.method == 'POST':
         if form.is_valid():
@@ -118,7 +120,8 @@ def add_course(request):
 def add_subject(request):
     form = SubjectForm(request.POST or None)
     context = {
-        'form': form
+        'form': form,
+        'page_title': 'Add Subject'
     }
     if request.method == 'POST':
         if form.is_valid():
@@ -148,7 +151,8 @@ def add_subject(request):
 def manage_staff(request):
     allStaff = CustomUser.objects.filter(user_type=2)
     context = {
-        'allStaff': allStaff
+        'allStaff': allStaff,
+        'page_title': 'Manage Staff'
     }
     return render(request, "hod_template/manage_staff.html", context)
 
@@ -156,7 +160,8 @@ def manage_staff(request):
 def manage_student(request):
     students = CustomUser.objects.filter(user_type=3)
     context = {
-        'students': students
+        'students': students,
+        'page_title': 'Manage Students'
     }
     return render(request, "hod_template/manage_student.html", context)
 
@@ -164,7 +169,8 @@ def manage_student(request):
 def manage_course(request):
     courses = Course.objects.all()
     context = {
-        'courses': courses
+        'courses': courses,
+        'page_title': 'Manage Courses'
     }
     return render(request, "hod_template/manage_course.html", context)
 
@@ -172,7 +178,8 @@ def manage_course(request):
 def manage_subject(request):
     subjects = Subject.objects.all()
     context = {
-        'subjects': subjects
+        'subjects': subjects,
+        'page_title': 'Manage Subjects'
     }
     return render(request, "hod_template/manage_subject.html", context)
 
@@ -181,7 +188,9 @@ def edit_staff(request, staff_id):
     staff = get_object_or_404(Staff, id=staff_id)
     form = StaffForm(request.POST or None, instance=staff)
     context = {
-        'form': form
+        'form': form,
+        'staff_id': staff_id,
+        'page_title': 'Edit Staff'
     }
     if request.method == 'POST':
         if form.is_valid():
@@ -204,7 +213,7 @@ def edit_staff(request, staff_id):
                     fs = FileSystemStorage()
                     filename = fs.save(passport.name, passport)
                     passport_url = fs.url(filename)
-                    staff.profile_pic = passport_url
+                    user.profile_pic = passport_url
                 user.first_name = first_name
                 user.last_name = last_name
                 staff.gender = gender
@@ -230,7 +239,9 @@ def edit_student(request, student_id):
     student = get_object_or_404(Student, id=student_id)
     form = StudentForm(request.POST or None, instance=student)
     context = {
-        'form': form
+        'form': form,
+        'student_id': student_id,
+        'page_title': 'Edit Student'
     }
     if request.method == 'POST':
         if form.is_valid():
@@ -245,12 +256,12 @@ def edit_student(request, student_id):
             session = form.cleaned_data.get('session')
             passport = request.FILES.get('profile_pic') or None
             try:
+                user = CustomUser.objects.get(id=student.admin.id)
                 if passport != None:
                     fs = FileSystemStorage()
                     filename = fs.save(passport.name, passport)
                     passport_url = fs.url(filename)
-                    student.profile_pic = passport_url
-                user = CustomUser.objects.get(id=student.admin.id)
+                    user.profile_pic = passport_url
                 user.username = username
                 user.email = email
                 if password != None:
@@ -280,7 +291,9 @@ def edit_course(request, course_id):
     instance = get_object_or_404(Course, id=course_id)
     form = CourseForm(request.POST or None, instance=instance)
     context = {
-        'form': form
+        'form': form,
+        'course_id': course_id,
+        'page_title': 'Edit Course'
     }
     if request.method == 'POST':
         if form.is_valid():
@@ -305,7 +318,9 @@ def edit_subject(request, subject_id):
     instance = get_object_or_404(Subject, id=subject_id)
     form = SubjectForm(request.POST or None, instance=instance)
     context = {
-        'form': form
+        'form': form,
+        'subject_id': subject_id,
+        'page_title': 'Edit Subject'
     }
     if request.method == 'POST':
         if form.is_valid():
@@ -332,7 +347,7 @@ def edit_subject(request, subject_id):
 
 def add_session(request):
     form = SessionForm(request.POST or None)
-    context = {'form': form}
+    context = {'form': form, 'page_title': 'Add Session'}
     if request.method == 'POST':
         if form.is_valid():
             try:
@@ -351,14 +366,15 @@ def add_session(request):
 
 def manage_session(request):
     sessions = Session.objects.all()
-    context = {'sessions': sessions}
+    context = {'sessions': sessions, 'page_title': 'Manage Sessions'}
     return render(request, "hod_template/manage_session.html", context)
 
 
 def edit_session(request, session_id):
     instance = get_object_or_404(Session, id=session_id)
     form = SessionForm(request.POST or None, instance=instance)
-    context = {'form': form}
+    context = {'form': form, 'session_id': session_id,
+               'page_title': 'Edit Session'}
     if request.method == 'POST':
         if form.is_valid():
             try:
@@ -394,7 +410,8 @@ def student_feedback_message(request):
     if request.method != 'POST':
         feedbacks = FeedbackStudent.objects.all()
         context = {
-            'feedbacks': feedbacks
+            'feedbacks': feedbacks,
+            'page_title': 'Student Feedback Messages'
         }
         return render(request, 'hod_template/student_feedback_template.html', context)
     else:
@@ -414,7 +431,8 @@ def staff_feedback_message(request):
     if request.method != 'POST':
         feedbacks = FeedbackStaff.objects.all()
         context = {
-            'feedbacks': feedbacks
+            'feedbacks': feedbacks,
+            'page_title': 'Staff Feedback Messages'
         }
         return render(request, 'hod_template/staff_feedback_template.html', context)
     else:
@@ -434,7 +452,8 @@ def view_staff_leave(request):
     if request.method != 'POST':
         allLeave = LeaveReportStaff.objects.all()
         context = {
-            'allLeave': allLeave
+            'allLeave': allLeave,
+            'page_title': 'Leave Applications From Staff'
         }
         return render(request, "hod_template/staff_leave_view.html", context)
     else:
@@ -458,7 +477,8 @@ def view_student_leave(request):
     if request.method != 'POST':
         allLeave = LeaveReportStudent.objects.all()
         context = {
-            'allLeave': allLeave
+            'allLeave': allLeave,
+            'page_title': 'Leave Applications From Students'
         }
         return render(request, "hod_template/student_leave_view.html", context)
     else:
@@ -482,7 +502,8 @@ def admin_view_attendance(request):
     sessions = Session.objects.all()
     context = {
         'subjects': subjects,
-        'sessions': sessions
+        'sessions': sessions,
+        'page_title': 'View Attendance'
     }
 
     return render(request, "hod_template/admin_view_attendance.html", context)
@@ -514,21 +535,29 @@ def get_admin_attendance(request):
 
 def admin_view_profile(request):
     admin = get_object_or_404(Admin, admin=request.user)
-    form = AdminForm(request.POST or None, instance=admin)
-    context = {'form': form}
+    form = AdminForm(request.POST or None,
+                     instance=admin)
+    context = {'form': form,
+               'page_title': 'View/Edit Profile'
+               }
     if request.method == 'POST':
         try:
             if form.is_valid():
                 first_name = form.cleaned_data.get('first_name')
                 last_name = form.cleaned_data.get('last_name')
-                email = form.cleaned_data.get('email')
-                password = form.cleaned_data.get('password')
-                user = CustomUser.objects.get(id=admin.id)
+                password = form.cleaned_data.get('password') or None
+                passport = request.FILES.get('profile_pic') or None
+                custom_user = admin.admin
                 if password != None:
-                    user.set_password(password)
-                user.first_name = first_name
-                user.last_name = last_name
-                user.save()
+                    custom_user.set_password(password)
+                if passport != None:
+                    fs = FileSystemStorage()
+                    filename = fs.save(passport.name, passport)
+                    passport_url = fs.url(filename)
+                    custom_user.profile_pic = passport_url
+                custom_user.first_name = first_name
+                custom_user.last_name = last_name
+                custom_user.save()
                 messages.success(request, "Profile Updated!")
                 return redirect(reverse('admin_view_profile'))
             else:

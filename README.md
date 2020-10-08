@@ -18,8 +18,6 @@ This is a Simple Student Management System Developed While Learning Django.
 - [x] Sidebar Active Status
 - [x] Named URLs
 - [x] Model Forms for adding  student
-- [x] Student Dashboard (After login in)
-- [x] Staff Dashboard (After login in)
 - [x] Model Forms for all
 - [x] Views Permission (MiddleWareMixin)
 - [x] Attendance and Update Attendance
@@ -34,11 +32,15 @@ This is a Simple Student Management System Developed While Learning Django.
 - [x] Admin Profile Edit
 - [x] Staff Profile Edit
 - [x] Student Profile Edit
-- [ ] Modify Student/Staff/Admin Dashboard
+- [x] Student Dashboard Fixed
+- [x] Passing Page Title From View To Follow *DRY* a bit
+- [ ] Staff Dashboard Fixed
+- [ ] Admin Dashboard Fixed
 - [ ] Firebase Web Push Notifications
 - [ ] Staff Add Student's Result
-- [ ] Student View Result
+- [ ] Staff Edit Result Using CBVs (Class Based Views)
 - [ ] Google CAPTCHA
+- [ ] Student View Result
 - [ ] Change all links to be dynamic
 - [ ] Code Restructure - Very Important
 - [ ] Others 

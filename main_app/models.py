@@ -44,6 +44,7 @@ class CustomUser(AbstractUser):
     username = None
     email = models.EmailField(unique=True)
     user_type = models.CharField(default=1, choices=USER_TYPE, max_length=1)
+    profile_pic = models.ImageField()
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
     objects = CustomUserManager()
@@ -75,7 +76,6 @@ class Student(models.Model):
         Session, on_delete=models.DO_NOTHING, null=True)
     gender = models.CharField(max_length=1, choices=GENDER)
     address = models.TextField()
-    profile_pic = models.ImageField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -89,7 +89,6 @@ class Staff(models.Model):
     admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     gender = models.CharField(max_length=1, choices=GENDER)
     address = models.TextField()
-    profile_pic = models.ImageField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -174,7 +173,7 @@ class NotificationStudent(models.Model):
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         if instance.user_type == 1:
-            AdminHOD.objects.create(admin=instance)
+            Admin.objects.create(admin=instance)
         if instance.user_type == 2:
             Staff.objects.create(admin=instance)
         if instance.user_type == 3:
@@ -184,7 +183,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=CustomUser)
 def save_user_profile(sender, instance, **kwargs):
     if instance.user_type == 1:
-        instance.adminhod.save()
+        instance.admin.save()
     if instance.user_type == 2:
         instance.staff.save()
     if instance.user_type == 3:

@@ -13,7 +13,8 @@ from .models import *
 
 
 def staff_home(request):
-    return render(request, 'staff_template/home_content.html')
+    context = {'page_title': 'Staff Panel'}
+    return render(request, 'staff_template/home_content.html', context)
 
 
 def staff_take_attendance(request):
@@ -21,7 +22,8 @@ def staff_take_attendance(request):
     sessions = Session.objects.all()
     context = {
         'subjects': subjects,
-        'sessions': sessions
+        'sessions': sessions,
+        'page_title': 'Take Attendance'
     }
 
     return render(request, 'staff_template/staff_take_attendance.html', context)
@@ -76,7 +78,8 @@ def staff_update_attendance(request):
     sessions = Session.objects.all()
     context = {
         'subjects': subjects,
-        'sessions': sessions
+        'sessions': sessions,
+        'page_title': 'Update Attendance'
     }
 
     return render(request, 'staff_template/staff_update_attendance.html', context)
@@ -126,7 +129,9 @@ def staff_apply_leave(request):
     staff = get_object_or_404(Staff, admin_id=request.user.id)
     context = {
         'form': form,
-        'leave_history': LeaveReportStaff.objects.filter(staff=staff)}
+        'leave_history': LeaveReportStaff.objects.filter(staff=staff),
+        'page_title': 'Apply for Leave'
+    }
     if request.method == 'POST':
         if form.is_valid():
             try:
@@ -148,7 +153,9 @@ def staff_feedback(request):
     staff = get_object_or_404(Staff, admin_id=request.user.id)
     context = {
         'form': form,
-        'feedbacks': FeedbackStaff.objects.filter(staff=staff)}
+        'feedbacks': FeedbackStaff.objects.filter(staff=staff),
+        'page_title': 'Add Feedback'
+    }
     if request.method == 'POST':
         if form.is_valid():
             try:
@@ -169,7 +176,7 @@ def staff_view_profile(request):
     staff = get_object_or_404(Staff, admin=request.user)
     form = StaffEditForm(request.POST or None,
                          instance=staff)
-    context = {'form': form}
+    context = {'form': form, 'page_title': 'View/Update Profile'}
     if request.method == 'POST':
         try:
             if form.is_valid():
@@ -186,7 +193,7 @@ def staff_view_profile(request):
                     fs = FileSystemStorage()
                     filename = fs.save(passport.name, passport)
                     passport_url = fs.url(filename)
-                    staff.profile_pic = passport_url
+                    admin.profile_pic = passport_url
                 admin.first_name = first_name
                 admin.last_name = last_name
                 staff.address = address

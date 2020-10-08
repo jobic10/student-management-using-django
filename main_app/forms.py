@@ -20,6 +20,7 @@ class CustomUserForm(FormSettings):
     widget = {
         'password': forms.PasswordInput()
     }
+    profile_pic = forms.ImageField()
 
     def __init__(self, *args, **kwargs):
         super(CustomUserForm, self).__init__(*args, **kwargs)
@@ -50,7 +51,8 @@ class CustomUserForm(FormSettings):
 
     class Meta:
         model = CustomUser
-        fields = ['first_name', 'last_name', 'email', 'password', ]
+        fields = ['first_name', 'last_name',
+                  'email', 'password', 'profile_pic', ]
 
 
 class StudentForm(CustomUserForm):
@@ -60,8 +62,7 @@ class StudentForm(CustomUserForm):
     class Meta(CustomUserForm.Meta):
         model = Student
         fields = CustomUserForm.Meta.fields + \
-            ['course', 'gender', 'address', 'profile_pic',
-                'session']
+            ['course', 'gender', 'address', 'session']
 
 
 class AdminForm(CustomUserForm):
@@ -80,7 +81,7 @@ class StaffForm(CustomUserForm):
     class Meta(CustomUserForm.Meta):
         model = Staff
         fields = CustomUserForm.Meta.fields + \
-            ['course', 'gender', 'address', 'profile_pic', ]
+            ['course', 'gender', 'address', ]
 
 
 class CourseForm(FormSettings):
@@ -166,7 +167,7 @@ class StudentEditForm(CustomUserForm):
     class Meta(CustomUserForm.Meta):
         model = Student
         fields = CustomUserForm.Meta.fields + \
-            ['gender', 'address', 'profile_pic']
+            ['gender', 'address', ]
 
 
 class StaffEditForm(CustomUserForm):
@@ -176,4 +177,4 @@ class StaffEditForm(CustomUserForm):
     class Meta(CustomUserForm.Meta):
         model = Staff
         fields = CustomUserForm.Meta.fields + \
-            ['gender', 'address', 'profile_pic']
+            ['gender', 'address', ]
