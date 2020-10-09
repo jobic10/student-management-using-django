@@ -33,10 +33,10 @@ This is a Simple Student Management System Developed While Learning Django.
 - [x] Staff Profile Edit
 - [x] Student Profile Edit
 - [x] Student Dashboard Fixed
-- [x] Passing Page Title From View To Follow *DRY* a bit
+- [x] Passing Page Title From View  - Improved
 - [x] Staff Dashboard Fixed
 - [x] Admin Dashboard Fixed
-- [ ] Firebase Web Push Notifications
+- [x] Firebase Web Push Notifications
 - [ ] Staff Add Student's Result
 - [ ] Staff Edit Result Using CBVs (Class Based Views)
 - [ ] Google CAPTCHA
