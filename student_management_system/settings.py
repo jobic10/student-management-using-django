@@ -28,7 +28,8 @@ SECRET_KEY = os.environ.get('MY_SECRET_KEY')  # Consider using your secret key
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['smswithdjango.herokuapp.com']
+# ALLOWED_HOSTS = ['smswithdjango.herokuapp.com']
+ALLOWED_HOSTS = ['*']  # Not recommended but useful in dev mode
 
 
 # Application definition
