@@ -45,6 +45,7 @@ class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
     user_type = models.CharField(default=1, choices=USER_TYPE, max_length=1)
     profile_pic = models.ImageField()
+    fcm_token = models.TextField(default="")
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
     objects = CustomUserManager()

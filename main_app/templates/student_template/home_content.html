@@ -73,7 +73,7 @@
                         <!-- DONUT CHART -->
                         <div class="card card-secondary">
                           <div class="card-header">
-                            <h3 class="card-title">Attendance Chart</h3>
+                            <h3 class="card-title">{{page_title}}</h3>
             
                             <div class="card-tools">
                               <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
@@ -93,7 +93,7 @@
             
                         <div class="card card-secondary">
                           <div class="card-header">
-                            <h3 class="card-title">Attendance Statistics</h3>
+                            <h3 class="card-title">{{page_title}}</h3>
             
                             <div class="card-tools">
                               <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
@@ -198,4 +198,95 @@ var barChart = new Chart(barChartCanvas, {
 })
 
   </script>
+        <!-- The core Firebase JS SDK is always required and must be listed first -->
+        <script src="https://www.gstatic.com/firebasejs/7.23.0/firebase-app.js"></script>
+
+        <!-- TODO: Add SDKs for Firebase products that you want to use
+         https://firebase.google.com/docs/web/setup#available-libraries -->
+        <script src="https://www.gstatic.com/firebasejs/7.23.0/firebase-analytics.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.22.1/firebase-messaging.js"></script>
+    
+    
+        <script>
+            // Your web app's Firebase configuration
+            // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+            var firebaseConfig = {
+                apiKey: "AIzaSyBarDWWHTfTMSrtc5Lj3Cdw5dEvjAkFwtM",
+                authDomain: "sms-with-django.firebaseapp.com",
+                databaseURL: "https://sms-with-django.firebaseio.com",
+                projectId: "sms-with-django",
+                storageBucket: "sms-with-django.appspot.com",
+                messagingSenderId: "945324593139",
+                appId: "1:945324593139:web:03fa99a8854bbd38420c86",
+                measurementId: "G-2F2RXTL9GT"
+            };
+            // Initialize Firebase
+            firebase.initializeApp(firebaseConfig)
+            const messaging = firebase.messaging();
+            function InitializeFireBaseMessaging() {
+                messaging
+                    .requestPermission()
+                    .then(function () {
+                        console.log("Notification Permission");
+                        return messaging.getToken();
+                    })
+                    .then(function (token) {
+                        console.log("Token : " + token);
+                        sendToServer(token);
+                    })
+                    .catch(function (reason) {
+                        console.log(reason)
+                    })
+            }
+            messaging.onMessage(function (payload) {
+                const notificationOption = {
+                    body: payload.notification.body,
+                    icon: payload.notification.icon,
+    
+                }
+                if (Notification.permission == 'granted') {
+                    var notification = new Notification(payload.notification.title, notificationOption);
+                    notification.onclick = function (event) {
+                        event.preventDefault();
+                        window.open(payload.notification.click_action, "_blank");
+                        notification.close();
+                    }
+                }
+                console.log(payload);
+            });
+            messaging.onTokenRefresh(function () {
+                messaging.getToken()
+                    .then(function (newToken) {
+                        console.log("New Token : " + newToken);
+                        sendToServer(newToken);
+  
+                    })
+                    .catch(function (reason) {
+                        console.log(reason)
+                    })
+            })
+    
+            function sendToServer(token){
+              $.ajax({
+                url: "{% url 'student_fcmtoken' %}",
+                type: 'POST',
+                data: {
+                    token: token,
+                }
+            }).done(function (response) {
+               
+              if (response == 'True'){
+                alert("Saved");
+              }else{
+                alert("Not Saved");
+              }
+               
+            }).fail(function (response) {
+                alert("Error in saving token")
+            })
+  
+            }
+            
+            InitializeFireBaseMessaging();
+        </script>
 {% endblock custom_js %}

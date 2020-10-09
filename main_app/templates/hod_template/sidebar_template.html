@@ -44,6 +44,26 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    {% url 'admin_notify_staff' as admin_notify_staff %}
+                    <a href="{{admin_notify_staff}}" class="nav-link {% if admin_notify_staff == request.path %} active {% endif %}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Notify Staff
+
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    {% url 'admin_notify_student' as admin_notify_student %}
+                    <a href="{{admin_notify_student}}" class="nav-link {% if admin_notify_student == request.path %} active {% endif %}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Notify Student
+
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     {% url 'add_staff' as add_staff %}
                     <a href="{{add_staff}}" class="nav-link {% if add_staff == request.path %} active {% endif %}">
                         <i class="nav-icon fas fa-th"></i>

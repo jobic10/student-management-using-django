@@ -176,3 +176,16 @@ def student_view_profile(request):
             return render(request, "student_template/student_view_profile.html", context)
 
     return render(request, "student_template/student_view_profile.html", context)
+
+
+@csrf_exempt
+def student_fcmtoken(request):
+    token = request.POST.get('token')
+    student_user = get_object_or_404(CustomUser, id=request.user.id)
+    try:
+        student_user.fcm_token = token
+        student_user.save()
+        return True
+    except Exception as e:
+        print("Error === > " + str(e))
+        return False

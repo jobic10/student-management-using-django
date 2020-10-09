@@ -234,3 +234,16 @@ def staff_view_profile(request):
             return render(request, "staff_template/staff_view_profile.html", context)
 
     return render(request, "staff_template/staff_view_profile.html", context)
+
+
+@csrf_exempt
+def staff_fcmtoken(request):
+    token = request.POST.get('token')
+    staff_user = get_object_or_404(CustomUser, id=request.user.id)
+    try:
+        staff_user.fcm_token = token
+        staff_user.save()
+        return True
+    except Exception as e:
+        print("Error === > " + str(e))
+        return False

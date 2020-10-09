@@ -1,0 +1,126 @@
+{% extends 'hod_template/base.html' %}
+{% load static %}
+{% block page_title %}{{page_title}}{% endblock page_title %}
+
+{% block content %}
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">{{page_title}}</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example2" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>SN</th>
+                                    <th>Full Name</th>
+                                    <th>Email</th>
+                                    <th>Gender</th>
+                                    <th>Course</th>
+                                    <th>Avatar</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for staff in allStaff %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{staff.last_name}}, {{staff.first_name}}</td>
+                                    <td>{{staff.email}}</td>
+                                    <td>{{staff.staff.gender}}</td>
+                                    <td>{{staff.staff.course.name}}</td>
+                                    <td>
+                                        {% if staff.profile_pic == ""  %}
+                                        No Image
+                                        {% else %}
+                                        <img class="img img-fluid mb-2" height="100" width="100"
+                                            src="{{staff.profile_pic}}" alt="">
+                                        {% endif %}
+                                    </td>
+                                    <td><button data-toggle = "modal" data-target = "#myModal"class="btn btn-primary show_notification" value="{{staff.id}}">Send Notification</button> 
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class = "modal fade" id = "myModal" tabindex = "-1" role = "dialog" 
+   aria-labelledby = "myModalLabel" aria-hidden = "true">
+   
+   <div class = "modal-dialog">
+      <div class = "modal-content">
+         
+         <div class = "modal-header">Send Notification
+            <button type = "button" class = "close" data-dismiss = "modal" aria-hidden = "true">
+                  &times;
+            </button>
+            
+           
+         </div>
+         
+         <div class = "modal-body">
+            <div class="form-group">
+                <input type="text" id="message" class='form-control'>
+                <input type="hidden"  id="staff_id" class='form-control'>
+            </div>
+         </div>
+         
+         <div class = "modal-footer">
+            <button type = "button" class = "btn btn-default" data-dismiss = "modal">
+               Close
+            </button>
+            
+            <button type = "button" id='send' class = "btn btn-success send_notification">
+               Send Notification
+            </button>
+         </div>
+         
+      </div><!-- /.modal-content -->
+   </div><!-- /.modal-dialog -->
+  
+</div><!-- /.modal -->
+{% endblock content %}
+{% block custom_js %}
+  <script>
+      $(".show_notification").click(function(){
+          $("#staff_id").val($(this).val())
+      })
+      $(". send_notification").click(function(){
+          var id = $("#staff_id").val()
+          var message = ("#message").val()
+          sendNotification(id,message);
+      })
+    function sendNotification(id,message){
+        $.ajax({
+            url: "{% url 'send_staff_notification' %}",
+            type: 'POST',
+            data: {
+                id: id,
+                message:message
+            }
+        }).done(function (response) {
+           
+          if (response == 'True'){
+            alert("Saved");
+          }else{
+            alert("Not Saved");
+          }
+           
+        }).fail(function (response) {
+            alert("Error in saving token")
+        })
+
+    }
+
+  </script>
+{% endblock custom_js %}

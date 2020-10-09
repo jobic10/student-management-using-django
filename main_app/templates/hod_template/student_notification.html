@@ -23,7 +23,7 @@
                                     <th>Gender</th>
                                     <th>Course</th>
                                     <th>Avatar</th>
-                                    <th>Edit</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -42,7 +42,7 @@
                                             src="{{student.profile_pic}}" alt="">
                                         {% endif %}
                                     </td>
-                                    <td><a href="/edit_student/{{student.student.id}}" class="btn btn-primary">Edit</a>
+                                    <td><button data-toggle = "modal" data-target = "#myModal"class="btn btn-primary show_notification" value="{{student.id}}">Send Notification</button> 
                                     </td>
                                 </tr>
                                 {% endfor %}
@@ -54,4 +54,73 @@
         </div>
     </div>
 </section>
+<div class = "modal fade" id = "myModal" tabindex = "-1" role = "dialog" 
+   aria-labelledby = "myModalLabel" aria-hidden = "true">
+   
+   <div class = "modal-dialog">
+      <div class = "modal-content">
+         
+         <div class = "modal-header">Send Notification
+            <button type = "button" class = "close" data-dismiss = "modal" aria-hidden = "true">
+                  &times;
+            </button>
+            
+           
+         </div>
+         
+         <div class = "modal-body">
+            <div class="form-group">
+                <input type="text" id="message" class='form-control'>
+                <input type="hidden"  id="student_id" class='form-control'>
+            </div>
+         </div>
+         
+         <div class = "modal-footer">
+            <button type = "button" class = "btn btn-default" data-dismiss = "modal">
+               Close
+            </button>
+            
+            <button type = "button" id='send' class = "btn btn-success send_notification">
+               Send Notification
+            </button>
+         </div>
+         
+      </div><!-- /.modal-content -->
+   </div><!-- /.modal-dialog -->
+  
+</div><!-- /.modal -->
 {% endblock content %}
+{% block custom_js %}
+  <script>
+      $(".show_notification").click(function(){
+          $("#student_id").val($(this).val())
+      })
+      $(". send_notification").click(function(){
+          var id = $("#student_id").val()
+          var message = ("#message").val()
+          sendNotification(id,message);
+      })
+    function sendNotification(id,message){
+        $.ajax({
+            url: "{% url 'send_student_notification' %}",
+            type: 'POST',
+            data: {
+                id: id,
+                message:message
+            }
+        }).done(function (response) {
+           
+          if (response == 'True'){
+            alert("Saved");
+          }else{
+            alert("Not Saved");
+          }
+           
+        }).fail(function (response) {
+            alert("Error in saving token")
+        })
+
+    }
+
+  </script>
+{% endblock custom_js %}

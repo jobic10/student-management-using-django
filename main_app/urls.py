@@ -18,13 +18,22 @@ from . import views, hod_views, staff_views, student_views
 urlpatterns = [
     path("", views.login_page, name='login_page'),
     path("get_attendance", views.get_attendance, name='get_attendance'),
+    path("firebase-messaging-sw.js", views.firebase_js, name='firebase_js'),
     path("doLogin/", views.doLogin, name='user_login'),
     path("get_user_details/", views.getUserDetails, name='get_user_details'),
     path("logout_user/", views.logout_user, name='user_logout'),
     path("admin_home/", hod_views.admin_home, name='admin_home'),
     path("add_staff/", hod_views.add_staff, name='add_staff'),
     path("add_course/", hod_views.add_course, name='add_course'),
+    path("send_student_notification/", hod_views.send_student_notification,
+         name='send_student_notification'),
+    path("send_staff_notification/", hod_views.send_staff_notification,
+         name='send_staff_notification'),
     path("add_session/", hod_views.add_session, name='add_session'),
+    path("admin_notify_student", hod_views.admin_notify_student,
+         name='admin_notify_student'),
+    path("admin_notify_staff", hod_views.admin_notify_staff,
+         name='admin_notify_staff'),
     path("admin_view_profile", hod_views.admin_view_profile,
          name='admin_view_profile'),
     path("check_email_availability", hod_views.check_email_availability,
@@ -74,6 +83,8 @@ urlpatterns = [
     path("save_attendance", staff_views.save_attendance, name='save_attendance'),
     path("update_attendance", staff_views.update_attendance,
          name='update_attendance'),
+    path("staff_fcmtoken", staff_views.staff_fcmtoken, name='staff_fcmtoken'),
+
 
     # Student
     path("student_home/", student_views.student_home, name='student_home'),
@@ -85,6 +96,8 @@ urlpatterns = [
          name='student_feedback'),
     path("student_view_profile", student_views.student_view_profile,
          name='student_view_profile'),
+    path("student_fcmtoken", student_views.student_fcmtoken,
+         name='student_fcmtoken'),
 
 
 ]
