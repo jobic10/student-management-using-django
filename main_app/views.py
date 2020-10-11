@@ -74,7 +74,7 @@ def get_attendance(request):
         return None
 
 
-def firebase_js(request):
+def showFirebaseJS(request):
     data = """
     // Give the service worker access to Firebase Messaging.
 // Note that you can only use Firebase Messaging here, other Firebase libraries
@@ -108,4 +108,4 @@ messaging.setBackgroundMessageHandler(function (payload) {
     return self.registration.showNotification(payload.notification.title, notificationOption);
 });
     """
-    return HttpResponse(data)
+    return HttpResponse(data, content_type='application/javascript')

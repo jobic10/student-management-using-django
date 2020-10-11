@@ -36,7 +36,7 @@ This is a Simple Student Management System Developed While Learning Django.
 - [x] Passing Page Title From View  - Improved
 - [x] Staff Dashboard Fixed
 - [x] Admin Dashboard Fixed
-- [x] Firebase Web Push Notifications
+- [ ] Firebase Web Push Notifications -- Not Working Locally, So, I've got to push to test online
 - [ ] Staff Add Student's Result
 - [ ] Staff Edit Result Using CBVs (Class Based Views)
 - [ ] Google CAPTCHA
