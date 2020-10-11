@@ -613,7 +613,7 @@ def admin_notify_student(request):
 def send_student_notification(request):
     id = request.POST.get('id')
     message = request.POST.get('message')
-    student = get_object_or_404(CustomUser, id=id)
+    student = get_object_or_404(Student, admin=request.user)
     try:
         url = "https://fcm.googleapis.com/fcm/send"
         body = {
@@ -621,7 +621,7 @@ def send_student_notification(request):
                 'title': "Student Management System",
                 'body': message
             },
-            'to': student.fcm_token
+            'to': student.admin.fcm_token
         }
         headers = {'Authorization':
                    'key=AAAA3Bm8j_M:APA91bElZlOLetwV696SoEtgzpJr2qbxBfxVBfDWFiopBWzfCfzQp2nRyC7_A2mlukZEHV4g1AmyC6P_HonvSkY2YyliKt5tT3fe_1lrKod2Daigzhb2xnYQMxUWjCAIQcUexAMPZePB',
@@ -640,7 +640,7 @@ def send_student_notification(request):
 def send_staff_notification(request):
     id = request.POST.get('id')
     message = request.POST.get('message')
-    staff = get_object_or_404(CustomUser, id=id)
+    staff = get_object_or_404(Staff, admin=request.user)
     try:
         url = "https://fcm.googleapis.com/fcm/send"
         body = {
@@ -648,7 +648,7 @@ def send_staff_notification(request):
                 'title': "Student Management System",
                 'body': message
             },
-            'to': staff.fcm_token
+            'to': staff.admin.fcm_token
         }
         headers = {'Authorization':
                    'key=AAAA3Bm8j_M:APA91bElZlOLetwV696SoEtgzpJr2qbxBfxVBfDWFiopBWzfCfzQp2nRyC7_A2mlukZEHV4g1AmyC6P_HonvSkY2YyliKt5tT3fe_1lrKod2Daigzhb2xnYQMxUWjCAIQcUexAMPZePB',
