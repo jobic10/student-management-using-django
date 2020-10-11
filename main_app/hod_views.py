@@ -621,7 +621,7 @@ def send_student_notification(request):
                 'title': "Student Management System",
                 'body': message
             },
-            'to': student.token
+            'to': student.fcm_token
         }
         headers = {'Authorization':
                    'key=AAAA3Bm8j_M:APA91bElZlOLetwV696SoEtgzpJr2qbxBfxVBfDWFiopBWzfCfzQp2nRyC7_A2mlukZEHV4g1AmyC6P_HonvSkY2YyliKt5tT3fe_1lrKod2Daigzhb2xnYQMxUWjCAIQcUexAMPZePB',
@@ -648,7 +648,7 @@ def send_staff_notification(request):
                 'title': "Student Management System",
                 'body': message
             },
-            'to': staff.token
+            'to': staff.fcm_token
         }
         headers = {'Authorization':
                    'key=AAAA3Bm8j_M:APA91bElZlOLetwV696SoEtgzpJr2qbxBfxVBfDWFiopBWzfCfzQp2nRyC7_A2mlukZEHV4g1AmyC6P_HonvSkY2YyliKt5tT3fe_1lrKod2Daigzhb2xnYQMxUWjCAIQcUexAMPZePB',
