@@ -185,7 +185,6 @@ def student_fcmtoken(request):
     try:
         student_user.fcm_token = token
         student_user.save()
-        return True
+        return HttpResponse("True")
     except Exception as e:
-        print("Error === > " + str(e))
-        return False
+        return HttpResponse("False")
