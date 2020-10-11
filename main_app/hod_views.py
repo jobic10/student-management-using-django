@@ -613,7 +613,7 @@ def admin_notify_student(request):
 def send_student_notification(request):
     id = request.POST.get('id')
     message = request.POST.get('message')
-    student = get_object_or_404(Student, admin=request.user)
+    student = get_object_or_404(Student, admin_id=id)
     try:
         url = "https://fcm.googleapis.com/fcm/send"
         body = {
@@ -640,7 +640,7 @@ def send_student_notification(request):
 def send_staff_notification(request):
     id = request.POST.get('id')
     message = request.POST.get('message')
-    staff = get_object_or_404(Staff, admin=request.user)
+    staff = get_object_or_404(Staff, admin_id=id)
     try:
         url = "https://fcm.googleapis.com/fcm/send"
         body = {
