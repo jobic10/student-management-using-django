@@ -5,6 +5,7 @@ from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import (HttpResponse, HttpResponseRedirect,
                               get_object_or_404, redirect, render)
+from django.templatetags.static import static
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import UpdateView
@@ -619,7 +620,9 @@ def send_student_notification(request):
         body = {
             'notification': {
                 'title': "Student Management System",
-                'body': message
+                'body': message,
+                'click_action': reverse('student_view_notification'),
+                'icon': static('dist/img/AdminLTELogo.png')
             },
             'to': student.admin.fcm_token
         }
@@ -646,7 +649,9 @@ def send_staff_notification(request):
         body = {
             'notification': {
                 'title': "Student Management System",
-                'body': message
+                'body': message,
+                'click_action': reverse('staff_view_notification'),
+                'icon': static('dist/img/AdminLTELogo.png')
             },
             'to': staff.admin.fcm_token
         }
