@@ -169,6 +169,15 @@ class NotificationStudent(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
+class StudentResult(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+    test = models.FloatField(default=0)
+    exam = models.FloatField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
 @receiver(post_save, sender=CustomUser)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
