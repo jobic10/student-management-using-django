@@ -110,11 +110,14 @@
             }
         }).done(function (response) {
            
-          if (response == 'True'){
-            alert("Saved");
-          }else{
-            alert("Not Saved");
-          }
+                
+            if (response == 'True'){
+                alert("Notification Sent");
+                location.reload();
+              }else{
+                alert("Notification could not be saved. Please try again.");
+              }
+               
            
         }).fail(function (response) {
             alert("Error in saving token")

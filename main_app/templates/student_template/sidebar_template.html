@@ -55,6 +55,17 @@
                 </li>
 
                 <li class="nav-item">
+                    {% url 'student_view_notification' as student_view_notification %}
+                    <a href="{{student_view_notification}}" class="nav-link {% if student_view_notification == request.path %} active {% endif %}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                           View Notifications
+
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     {% url 'student_apply_leave' as student_apply_leave %}
                     <a href="{{student_apply_leave}}" class="nav-link {% if student_apply_leave == request.path %} active {% endif %}">
                         <i class="nav-icon fas fa-th"></i>

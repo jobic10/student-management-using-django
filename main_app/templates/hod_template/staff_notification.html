@@ -111,9 +111,10 @@
         }).done(function (response) {
            
           if (response == 'True'){
-            alert("Saved");
+            alert("Notification Sent");
+            location.reload();
           }else{
-            alert("Not Saved");
+            alert("Notification could not be saved. Please try again.");
           }
            
         }).fail(function (response) {

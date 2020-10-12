@@ -555,7 +555,7 @@ def get_admin_attendance(request):
 
 def admin_view_profile(request):
     admin = get_object_or_404(Admin, admin=request.user)
-    form = AdminForm(request.POST or None,
+    form = AdminForm(request.POST or None, request.FILES or None,
                      instance=admin)
     context = {'form': form,
                'page_title': 'View/Edit Profile'

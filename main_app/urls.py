@@ -84,6 +84,9 @@ urlpatterns = [
     path("update_attendance", staff_views.update_attendance,
          name='update_attendance'),
     path("staff_fcmtoken", staff_views.staff_fcmtoken, name='staff_fcmtoken'),
+    path("staff_view_notification", staff_views.staff_view_notification,
+         name="staff_view_notification"),
+
 
 
     # Student
@@ -98,6 +101,9 @@ urlpatterns = [
          name='student_view_profile'),
     path("student_fcmtoken", student_views.student_fcmtoken,
          name='student_fcmtoken'),
+    path("student_view_notification", student_views.student_view_notification,
+         name="student_view_notification"),
+
 
 
 ]
