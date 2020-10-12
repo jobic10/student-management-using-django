@@ -86,6 +86,7 @@ urlpatterns = [
     path("staff_fcmtoken", staff_views.staff_fcmtoken, name='staff_fcmtoken'),
     path("staff_view_notification", staff_views.staff_view_notification,
          name="staff_view_notification"),
+    path("staff_add_result", staff_views.staff_add_result, name='staff_add_result'),
 
 
 

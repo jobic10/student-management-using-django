@@ -62,7 +62,7 @@ def get_students(request):
             course_id=subject.course.id, session=session)
         student_data = []
         for student in students:
-            data = {"id": student.admin.id,
+            data = {"id": student.id,
                     "name": student.admin.last_name + " " + student.admin.first_name}
             student_data.append(data)
         return JsonResponse(json.dumps(student_data), content_type='application/json', safe=False)
@@ -85,7 +85,7 @@ def save_attendance(request):
 
         for student_dict in students:
             student = get_object_or_404(
-                Student, admin_id=student_dict.get('id'))
+                Student, id=student_dict.get('id'))
             attendance_report = AttendanceReport(
                 student=student, attendance=attendance, status=student_dict.get('status'))
             attendance_report.save()
@@ -256,3 +256,34 @@ def staff_view_notification(request):
         'page_title': "View Notifications"
     }
     return render(request, "staff_template/staff_view_notification.html", context)
+
+
+def staff_add_result(request):
+    staff = get_object_or_404(Staff, admin=request.user)
+    subjects = Subject.objects.filter(staff=staff)
+    sessions = Session.objects.all()
+    context = {
+        'page_title': 'Result Upload',
+        'subjects': subjects,
+        'sessions': sessions
+    }
+    if request.method == 'POST':
+        try:
+            student_id = request.POST.get('student_list')
+            subject_id = request.POST.get('subject')
+            test = request.POST.get('test')
+            exam = request.POST.get('exam')
+            student = get_object_or_404(Student, id=student_id)
+            subject = get_object_or_404(Subject, id=subject_id)
+            obj, created = StudentResult.objects.get_or_create(
+                student=student, subject=subject, test=test, exam=exam)
+            if created:
+                messages.success(
+                    request, "Scores Saved")
+            else:
+                messages.success(
+                    request, "Scores Updated")
+        except Exception as e:
+            messages.warning(request, "Error Occured While Processing Form")
+            print("Error ========> " + str(e))
+    return render(request, "staff_template/staff_add_result.html", context)
