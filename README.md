@@ -45,6 +45,7 @@ This is a Simple Student Management System Developed While Learning Django.
 - [ ] Code Restructure - Very Important
 - [ ] Others 
 
+
 ## Questions I asked While Developing This
 - https://stackoverflow.com/questions/63829896/is-there-a-specific-way-of-adding-apps-in-django/
 
