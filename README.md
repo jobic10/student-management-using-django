@@ -37,8 +37,8 @@ This is a Simple Student Management System Developed While Learning Django.
 - [x] Staff Dashboard Fixed
 - [x] Admin Dashboard Fixed
 - [x] Firebase Web Push Notifications
-- [ ] Staff Add Student's Result
-- [ ] Staff Edit Result Using CBVs (Class Based Views)
+- [x] Staff Add Student's Result
+- [x] Staff Edit Result Using CBVs (Class Based Views)
 - [ ] Google CAPTCHA
 - [ ] Student View Result
 - [ ] Change all links to be dynamic
