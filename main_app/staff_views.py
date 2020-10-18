@@ -275,14 +275,18 @@ def staff_add_result(request):
             exam = request.POST.get('exam')
             student = get_object_or_404(Student, id=student_id)
             subject = get_object_or_404(Subject, id=subject_id)
-            obj, created = StudentResult.objects.get_or_create(
-                student=student, subject=subject, test=test, exam=exam)
-            if created:
-                messages.success(
-                    request, "Scores Saved")
-            else:
-                messages.success(
-                    request, "Scores Updated")
+            try:
+                data = StudentResult.objects.get(
+                    student=student, subject=subject)
+                data.exam = exam
+                data.test = test
+                data.save()
+                messages.success(request, "Scores Updated")
+            except:
+                result = StudentResult(
+                    student=student, subject=subject, test=test, exam=exam)
+                result.save()
+                messages.success(request, "Scores Saved")
         except Exception as e:
             messages.warning(request, "Error Occured While Processing Form")
             print("Error ========> " + str(e))
