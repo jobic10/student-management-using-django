@@ -112,6 +112,8 @@ urlpatterns = [
          name='student_fcmtoken'),
     path("student_view_notification", student_views.student_view_notification,
          name="student_view_notification"),
+    path('student_view_result', student_views.student_view_result,
+         name='student_view_result'),
 
 
 

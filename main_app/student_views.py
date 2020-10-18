@@ -1,6 +1,7 @@
 import json
-from datetime import datetime
 import math
+from datetime import datetime
+
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse, JsonResponse
@@ -198,3 +199,13 @@ def student_view_notification(request):
         'page_title': "View Notifications"
     }
     return render(request, "student_template/student_view_notification.html", context)
+
+
+def student_view_result(request):
+    student = get_object_or_404(Student, admin=request.user)
+    results = StudentResult.objects.filter(student=student)
+    context = {
+        'results': results,
+        'page_title': "View Results"
+    }
+    return render(request, "student_template/student_view_result.html", context)

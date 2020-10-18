@@ -40,10 +40,9 @@ This is a Simple Student Management System Developed While Learning Django.
 - [x] Staff Add Student's Result
 - [x] Staff Edit Result Using CBVs (Class Based Views)
 - [x] Google CAPTCHA
-- [ ] Student View Result
-- [ ] Change all links to be dynamic
+- [x] Student View Result
+- [x] Change all links to be dynamic
 - [ ] Code Restructure - Very Important
-- [ ] Others 
 
 
 ## Questions I asked While Developing This
