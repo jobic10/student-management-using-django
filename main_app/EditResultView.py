@@ -38,8 +38,7 @@ class EditResultView(View):
             except Exception as e:
                 print("Error ------------> " + str(e))
                 messages.warning(request, "Result Could Not Be Updated")
-                return render(request, "staff_template/edit_student_result.html", context)
 
         else:
             messages.warning(request, "Result Could Not Be Updated")
-            return render(request, "staff_template/edit_student_result.html", context)
+        return render(request, "staff_template/edit_student_result.html", context)
