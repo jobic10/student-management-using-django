@@ -1,5 +1,5 @@
 import json
-
+import requests
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, JsonResponse
@@ -27,6 +27,20 @@ def doLogin(request, **kwargs):
     if request.method != 'POST':
         return HttpResponse("<h4>Denied</h4>")
     else:
+        captcha_token = request.POST.get('g-recaptcha-response')
+        captcha_url = "https://www.google.com/recaptcha/api/siteverify"
+        captcha_key = "6LfswtgZAAAAABX9gbLqe-d97qE2g1JP8oUYritJ"
+        data = {
+            'secret': captcha_key,
+            'response': captcha_token
+
+        }
+        captcha_server = requests.post(url=captcha_url, data=data)
+        response = json.loads(captcha_server.text)
+        if response['success'] == False:
+            messages.error(request, 'Invalid Captcha. Try Again')
+            return redirect('/')
+
         user = EmailBackend.authenticate(request, username=request.POST.get(
             'email'), password=request.POST.get('password'))
         if user != None:
