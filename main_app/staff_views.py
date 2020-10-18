@@ -287,3 +287,21 @@ def staff_add_result(request):
             messages.warning(request, "Error Occured While Processing Form")
             print("Error ========> " + str(e))
     return render(request, "staff_template/staff_add_result.html", context)
+
+
+@csrf_exempt
+def fetch_student_result(request):
+    try:
+        subject_id = request.POST.get('subject')
+        student_id = request.POST.get('student')
+        student = get_object_or_404(Student, id=student_id)
+        subject = get_object_or_404(Subject, id=subject_id)
+        result = StudentResult.objects.get(student=student, subject=subject)
+        result_data = {
+            'exam': result.exam,
+            'test': result.test
+        }
+        return HttpResponse(json.dumps(result_data))
+    except Exception as e:
+        print("Error =============++> " + str(e))
+        return HttpResponse('False')
