@@ -61,8 +61,10 @@ def get_students(request):
             course_id=subject.course.id, session=session)
         student_data = []
         for student in students:
-            data = {"id": student.id,
-                    "name": student.admin.last_name + " " + student.admin.first_name}
+            data = {
+                    "id": student.id,
+                    "name": student.admin.last_name + " " + student.admin.first_name
+                    }
             student_data.append(data)
         return JsonResponse(json.dumps(student_data), content_type='application/json', safe=False)
     except Exception as e:
@@ -276,8 +278,7 @@ def staff_add_result(request):
                 data.save()
                 messages.success(request, "Scores Updated")
             except:
-                result = StudentResult(
-                    student=student, subject=subject, test=test, exam=exam)
+                result = StudentResult(student=student, subject=subject, test=test, exam=exam)
                 result.save()
                 messages.success(request, "Scores Saved")
         except Exception as e:
