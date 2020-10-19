@@ -7,7 +7,7 @@ from .models import *
 class FormSettings(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(FormSettings, self).__init__(*args, **kwargs)
-        # Here make some changes such as:
+        # Here make some changes such as 'class':
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-control'
 
@@ -37,22 +37,19 @@ class CustomUserForm(FormSettings):
         formEmail = self.cleaned_data['email'].lower()
         if self.instance.pk is None:  # Insert
             if CustomUser.objects.filter(email=formEmail).exists():
-                raise forms.ValidationError(
-                    "The given email is already registered")
+                raise forms.ValidationError("The given email is already registered")
         else:  # Update
             dbEmail = self.Meta.model.objects.get(
                 id=self.instance.pk).admin.email.lower()
             if dbEmail != formEmail:  # There has been changes
                 if CustomUser.objects.filter(email=formEmail).exists():
-                    raise forms.ValidationError(
-                        "The given email is already registered")
+                    raise forms.ValidationError("The given email is already registered")
 
         return formEmail
 
     class Meta:
         model = CustomUser
-        fields = ['first_name', 'last_name',
-                  'email', 'password', 'profile_pic', ]
+        fields = ['first_name', 'last_name','email', 'password', 'profile_pic', ]
 
 
 class StudentForm(CustomUserForm):
@@ -61,8 +58,7 @@ class StudentForm(CustomUserForm):
 
     class Meta(CustomUserForm.Meta):
         model = Student
-        fields = CustomUserForm.Meta.fields + \
-            ['course', 'gender', 'address', 'session']
+        fields = CustomUserForm.Meta.fields + ['course', 'gender', 'address', 'session']
 
 
 class AdminForm(CustomUserForm):
@@ -80,8 +76,7 @@ class StaffForm(CustomUserForm):
 
     class Meta(CustomUserForm.Meta):
         model = Staff
-        fields = CustomUserForm.Meta.fields + \
-            ['course', 'gender', 'address', ]
+        fields = CustomUserForm.Meta.fields + ['course', 'gender', 'address' ]
 
 
 class CourseForm(FormSettings):
@@ -166,8 +161,7 @@ class StudentEditForm(CustomUserForm):
 
     class Meta(CustomUserForm.Meta):
         model = Student
-        fields = CustomUserForm.Meta.fields + \
-            ['gender', 'address', ]
+        fields = CustomUserForm.Meta.fields + ['gender', 'address', ]
 
 
 class StaffEditForm(CustomUserForm):
@@ -176,8 +170,7 @@ class StaffEditForm(CustomUserForm):
 
     class Meta(CustomUserForm.Meta):
         model = Staff
-        fields = CustomUserForm.Meta.fields + \
-            ['gender', 'address', ]
+        fields = CustomUserForm.Meta.fields + ['gender', 'address', ]
 
 
 class EditResultForm(FormSettings):
