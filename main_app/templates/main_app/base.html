@@ -53,13 +53,9 @@
 
         <!-- Main Sidebar Container -->
           
-    {% if request.user.user_type == '1' %}
-        {% include "hod_template/sidebar_template.html" with user=user %}
-    {% elif request.user.user_type == '2' %}
-        {% include "staff_template/sidebar_template.html" with user=user %}
-    {% else %}
-        {% include "student_template/sidebar_template.html" with user=user %}
-    {% endif %}
+ 
+        {% include "main_app/sidebar_template.html" with user=user %}
+
       
         <div class="content-wrapper">
 
