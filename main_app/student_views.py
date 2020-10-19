@@ -170,8 +170,7 @@ def student_view_profile(request):
             else:
                 messages.error(request, "Invalid Data Provided")
         except Exception as e:
-            messages.error(
-                request, "Error Occured While Updating Profile " + str(e))
+            messages.error(request, "Error Occured While Updating Profile " + str(e))
 
     return render(request, "student_template/student_view_profile.html", context)
 
