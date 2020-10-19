@@ -10,8 +10,7 @@ class EditResultView(View):
     def get(self, request, *args, **kwargs):
         resultForm = EditResultForm()
         staff = get_object_or_404(Staff, admin=request.user)
-        resultForm.fields['subject'].queryset = Subject.objects.filter(
-            staff=staff)
+        resultForm.fields['subject'].queryset = Subject.objects.filter(staff=staff)
         context = {
             'form': resultForm,
             'page_title': "Edit Student's Result"
@@ -37,7 +36,6 @@ class EditResultView(View):
                 return redirect(reverse('edit_student_result'))
             except Exception as e:
                 messages.warning(request, "Result Could Not Be Updated")
-
         else:
             messages.warning(request, "Result Could Not Be Updated")
         return render(request, "staff_template/edit_student_result.html", context)
