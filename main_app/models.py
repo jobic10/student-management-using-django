@@ -71,9 +71,7 @@ class Course(models.Model):
 
 class Student(models.Model):
     admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    course = models.ForeignKey(
-        Course, on_delete=models.DO_NOTHING, null=True, blank=False
-    )
+    course = models.ForeignKey(Course, on_delete=models.DO_NOTHING, null=True, blank=False)
     session = models.ForeignKey(Session, on_delete=models.DO_NOTHING, null=True)
     gender = models.CharField(max_length=1, choices=GENDER)
     address = models.TextField()
