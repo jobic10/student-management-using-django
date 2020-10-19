@@ -289,7 +289,6 @@ def staff_add_result(request):
                 messages.success(request, "Scores Saved")
         except Exception as e:
             messages.warning(request, "Error Occured While Processing Form")
-            print("Error ========> " + str(e))
     return render(request, "staff_template/staff_add_result.html", context)
 
 
@@ -307,5 +306,4 @@ def fetch_student_result(request):
         }
         return HttpResponse(json.dumps(result_data))
     except Exception as e:
-        print("Error =============++> " + str(e))
         return HttpResponse('False')

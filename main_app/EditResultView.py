@@ -36,7 +36,6 @@ class EditResultView(View):
                 messages.success(request, "Result Updated")
                 return redirect(reverse('edit_student_result'))
             except Exception as e:
-                print("Error ------------> " + str(e))
                 messages.warning(request, "Result Could Not Be Updated")
 
         else:

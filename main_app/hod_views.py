@@ -632,10 +632,8 @@ def send_student_notification(request):
         data = requests.post(url, data=json.dumps(body), headers=headers)
         notification = NotificationStudent(student=student, message=message)
         notification.save()
-        print("HEre ============ > " + str(data))
         return HttpResponse("True")
     except Exception as e:
-        print("Error = >" + str(e))
         return HttpResponse("False")
 
 
@@ -661,8 +659,6 @@ def send_staff_notification(request):
         data = requests.post(url, data=json.dumps(body), headers=headers)
         notification = NotificationStaff(staff=staff, message=message)
         notification.save()
-        print("HEre ============ > " + str(data))
         return HttpResponse("True")
     except Exception as e:
-        print("Error = >" + str(e))
         return HttpResponse("False")
