@@ -33,8 +33,8 @@ def doLogin(request, **kwargs):
         data = {
             'secret': captcha_key,
             'response': captcha_token
-
         }
+        # Make request
         try:
             captcha_server = requests.post(url=captcha_url, data=data)
             response = json.loads(captcha_server.text)
@@ -44,8 +44,9 @@ def doLogin(request, **kwargs):
         except:
             messages.error(request, 'Captcha could not be verified. Try Again')
             return redirect('/')
-        user = EmailBackend.authenticate(request, username=request.POST.get(
-            'email'), password=request.POST.get('password'))
+        
+        #Authenticate
+        user = EmailBackend.authenticate(request, username=request.POST.get('email'), password=request.POST.get('password'))
         if user != None:
             login(request, user)
             if user.user_type == '1':
@@ -79,12 +80,14 @@ def get_attendance(request):
     try:
         subject = get_object_or_404(Subject, id=subject_id)
         session = get_object_or_404(Session, id=session_id)
-        attendance = Attendance.objects.filter(
-            subject=subject, session=session)
+        attendance = Attendance.objects.filter(subject=subject, session=session)
         attendance_list = []
         for attd in attendance:
-            data = {"id": attd.id, "attendance_date": str(attd.date),
-                    "session": attd.session.id}
+            data = {
+                    "id": attd.id,
+                    "attendance_date": str(attd.date),
+                    "session": attd.session.id
+                    }
             attendance_list.append(data)
         return JsonResponse(json.dumps(attendance_list), safe=False)
     except Exception as e:
