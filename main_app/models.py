@@ -36,7 +36,7 @@ class Session(models.Model):
     end_year = models.DateField()
 
     def __str__(self):
-        return "From " + str(self.start_year) + " To " + str(self.end_year)
+        return "From " + str(self.start_year) + " to " + str(self.end_year)
 
 
 class CustomUser(AbstractUser):
