@@ -1,6 +1,6 @@
 {% load static %}
-{% if request.user.user_type == '1' %}
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
+{% if request.user.user_type == '1' %}
     <!-- Brand Logo -->
     <a href="{% url 'admin_home' %}" class="brand-link">
         <img src="{% static 'dist/img/AdminLTELogo.png' %} " alt="AdminLTE Logo"
@@ -231,24 +231,8 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="{% url 'user_logout' %}" class="nav-link">
-                        <i class="nav-icon fas fa-th"></i>
-                        <p>
-                            Logout
-                            
-                        </p>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-        <!-- /.sidebar-menu -->
-    </div>
-    <!-- /.sidebar -->
-</aside>
+                
 {% elif request.user.user_type == '2' %}
-
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="#" class="brand-link">
         <img src="{% static 'dist/img/AdminLTELogo.png' %} " alt="AdminLTE Logo"
@@ -367,23 +351,7 @@
                     </a>
                 </li>
           
-                <li class="nav-item">
-                    <a href="{% url 'user_logout' %}" class="nav-link">
-                        <i class="nav-icon fas fa-th"></i>
-                        <p>
-                            Logout
-                            <span class="right badge badge-danger">New</span>
-                        </p>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-        <!-- /.sidebar-menu -->
-    </div>
-    <!-- /.sidebar -->
-</aside>
 {% else %}
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="" class="brand-link">
         
@@ -471,19 +439,22 @@
                     </a>
                 </li>
           
-                <li class="nav-item">
-                    <a href="{% url 'user_logout' %}" class="nav-link">
-                        <i class="nav-icon fas fa-th"></i>
-                        <p>
-                            Logout
-                            <span class="right badge badge-danger">New</span>
-                        </p>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-        <!-- /.sidebar-menu -->
-    </div>
-    <!-- /.sidebar -->
-</aside>
 {% endif %}
+
+
+
+<li class="nav-item">
+    <a href="{% url 'user_logout' %}" class="nav-link">
+        <i class="nav-icon fas fa-th"></i>
+        <p>
+            Logout
+            <span class="right badge badge-danger">New</span>
+        </p>
+    </a>
+</li>
+</ul>
+</nav>
+<!-- /.sidebar-menu -->
+</div>
+<!-- /.sidebar -->
+</aside>
