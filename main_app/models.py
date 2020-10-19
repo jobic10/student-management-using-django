@@ -1,4 +1,3 @@
-
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import UserManager
 from django.dispatch import receiver
@@ -7,7 +6,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 # Available Gender
-GENDER = [('M', 'Male'), ('F', 'Female')]
+GENDER = [("M", "Male"), ("F", "Female")]
 
 
 class CustomUserManager(UserManager):
@@ -19,16 +18,16 @@ class CustomUserManager(UserManager):
         return user
 
     def create_user(self, email, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', False)
-        extra_fields.setdefault('is_superuser', False)
+        extra_fields.setdefault("is_staff", False)
+        extra_fields.setdefault("is_superuser", False)
         return self._create_user(email, password, **extra_fields)
 
     def create_superuser(self, email, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
 
-        assert extra_fields['is_staff']
-        assert extra_fields['is_superuser']
+        assert extra_fields["is_staff"]
+        assert extra_fields["is_superuser"]
         return self._create_user(email, password, **extra_fields)
 
 
@@ -41,13 +40,13 @@ class Session(models.Model):
 
 
 class CustomUser(AbstractUser):
-    USER_TYPE = ((1, 'HOD'), (2, 'Staff'), (3, 'Student'))
-    username = None
+    USER_TYPE = ((1, "HOD"), (2, "Staff"), (3, "Student"))
+    username = None  # Removed username, using email instead
     email = models.EmailField(unique=True)
     user_type = models.CharField(default=1, choices=USER_TYPE, max_length=1)
     profile_pic = models.ImageField()
     fcm_token = models.TextField(default="")  # For firebase notifications
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
     objects = CustomUserManager()
 
@@ -73,9 +72,9 @@ class Course(models.Model):
 class Student(models.Model):
     admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     course = models.ForeignKey(
-        Course, on_delete=models.DO_NOTHING, null=True, blank=False)
-    session = models.ForeignKey(
-        Session, on_delete=models.DO_NOTHING, null=True)
+        Course, on_delete=models.DO_NOTHING, null=True, blank=False
+    )
+    session = models.ForeignKey(Session, on_delete=models.DO_NOTHING, null=True)
     gender = models.CharField(max_length=1, choices=GENDER)
     address = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -86,8 +85,7 @@ class Student(models.Model):
 
 
 class Staff(models.Model):
-    course = models.ForeignKey(
-        Course, on_delete=models.DO_NOTHING, null=True, blank=False)
+    course = models.ForeignKey(Course, on_delete=models.DO_NOTHING, null=True, blank=False)
     admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     gender = models.CharField(max_length=1, choices=GENDER)
     address = models.TextField()
@@ -100,7 +98,7 @@ class Staff(models.Model):
 
 class Subject(models.Model):
     name = models.CharField(max_length=120)
-    staff = models.ForeignKey(Staff, on_delete=models.CASCADE, )
+    staff = models.ForeignKey(Staff,on_delete=models.CASCADE,)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
