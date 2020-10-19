@@ -18,8 +18,7 @@ def student_home(request):
     student = get_object_or_404(Student, admin=request.user)
     total_subject = Subject.objects.filter(course=student.course).count()
     total_attendance = AttendanceReport.objects.filter(student=student).count()
-    total_present = AttendanceReport.objects.filter(
-        student=student, status=True).count()
+    total_present = AttendanceReport.objects.filter(student=student, status=True).count()
     if total_attendance == 0:  # Don't divide. DivisionByZero
         percent_absent = percent_present = 0
     else:
@@ -170,11 +169,9 @@ def student_view_profile(request):
                 return redirect(reverse('student_view_profile'))
             else:
                 messages.error(request, "Invalid Data Provided")
-                return render(request, "student_template/student_view_profile.html", context)
         except Exception as e:
             messages.error(
                 request, "Error Occured While Updating Profile " + str(e))
-            return render(request, "student_template/student_view_profile.html", context)
 
     return render(request, "student_template/student_view_profile.html", context)
 
