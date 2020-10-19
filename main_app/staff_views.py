@@ -3,8 +3,7 @@ import json
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import (HttpResponseRedirect, get_object_or_404,
-                              redirect, render)
+from django.shortcuts import (HttpResponseRedirect, get_object_or_404,redirect, render)
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
@@ -84,10 +83,8 @@ def save_attendance(request):
         attendance.save()
 
         for student_dict in students:
-            student = get_object_or_404(
-                Student, id=student_dict.get('id'))
-            attendance_report = AttendanceReport(
-                student=student, attendance=attendance, status=student_dict.get('status'))
+            student = get_object_or_404(Student, id=student_dict.get('id'))
+            attendance_report = AttendanceReport(student=student, attendance=attendance, status=student_dict.get('status'))
             attendance_report.save()
     except Exception as e:
         return None
@@ -113,8 +110,7 @@ def get_student_attendance(request):
     attendance_date_id = request.POST.get('attendance_date_id')
     try:
         date = get_object_or_404(Attendance, id=attendance_date_id)
-        attendance_data = AttendanceReport.objects.filter(
-            attendance=date)
+        attendance_data = AttendanceReport.objects.filter(attendance=date)
         student_data = []
         for attendance in attendance_data:
             data = {"id": attendance.student.admin.id,
@@ -137,8 +133,7 @@ def update_attendance(request):
         for student_dict in students:
             student = get_object_or_404(
                 Student, admin_id=student_dict.get('id'))
-            attendance_report = get_object_or_404(
-                AttendanceReport, student=student, attendance=attendance)
+            attendance_report = get_object_or_404(AttendanceReport, student=student, attendance=attendance)
             attendance_report.status = student_dict.get('status')
             attendance_report.save()
     except Exception as e:
@@ -185,8 +180,7 @@ def staff_feedback(request):
                 obj = form.save(commit=False)
                 obj.staff = staff
                 obj.save()
-                messages.success(
-                    request, "Feedback submitted for review")
+                messages.success(request, "Feedback submitted for review")
                 return redirect(reverse('staff_feedback'))
             except Exception:
                 messages.error(request, "Could not Submit!")
@@ -197,8 +191,7 @@ def staff_feedback(request):
 
 def staff_view_profile(request):
     staff = get_object_or_404(Staff, admin=request.user)
-    form = StaffEditForm(request.POST or None, request.FILES or None,
-                         instance=staff)
+    form = StaffEditForm(request.POST or None, request.FILES or None,instance=staff)
     context = {'form': form, 'page_title': 'View/Update Profile'}
     if request.method == 'POST':
         try:
