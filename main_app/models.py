@@ -1,15 +1,16 @@
+
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import UserManager
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+
+# Available Gender
 GENDER = [('M', 'Male'), ('F', 'Female')]
-# Create your models here.
 
 
 class CustomUserManager(UserManager):
-
     def _create_user(self, email, password, **extra_fields):
         email = self.normalize_email(email)
         user = CustomUser(email=email, **extra_fields)
@@ -45,7 +46,7 @@ class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
     user_type = models.CharField(default=1, choices=USER_TYPE, max_length=1)
     profile_pic = models.ImageField()
-    fcm_token = models.TextField(default="")
+    fcm_token = models.TextField(default="")  # For firebase notifications
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
     objects = CustomUserManager()
