@@ -47,28 +47,20 @@
 
             </ul>
 
-            {% comment %}
-            <!-- SEARCH FORM -->
-            <form class="form-inline ml-3">
-                <div class="input-group input-group-sm">
-                    <input class="form-control form-control-navbar" type="search" placeholder="Search"
-                        aria-label="Search">
-                    <div class="input-group-append">
-                        <button class="btn btn-navbar" type="submit">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </div>
-            </form>
 
-            <!-- Right navbar links -->
-            {% endcomment %}
-            {% include "hod_template/notification_template.html" %}
         </nav>
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
+          
+    {% if request.user.user_type == '1' %}
         {% include "hod_template/sidebar_template.html" with user=user %}
+    {% elif request.user.user_type == '2' %}
+        {% include "staff_template/sidebar_template.html" with user=user %}
+    {% else %}
+        {% include "student_template/sidebar_template.html" with user=user %}
+    {% endif %}
+      
         <div class="content-wrapper">
 
             <!-- Content Wrapper. Contains page content -->
@@ -97,7 +89,7 @@
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
-        {% include "hod_template/footer.html" %}
+        {% include "main_app/footer.html" %}
 
 
     </div>
