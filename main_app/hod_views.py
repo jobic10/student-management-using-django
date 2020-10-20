@@ -103,10 +103,8 @@ def add_student(request):
                 return redirect(reverse('add_student'))
             except Exception as e:
                 messages.error(request, "Could Not Add: " + str(e))
-                return render(request, 'hod_template/add_student_template.html', context)
         else:
             messages.error(request, "Could Not Add: ")
-            return render(request, 'hod_template/add_student_template.html', context)
     return render(request, 'hod_template/add_student_template.html', context)
 
 
