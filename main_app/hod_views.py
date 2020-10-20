@@ -123,13 +123,10 @@ def add_course(request):
                 course.save()
                 messages.success(request, "Successfully Added")
                 return redirect(reverse('add_course'))
-                return render(request, 'hod_template/add_course_template.html')
             except:
                 messages.error(request, "Could Not Add")
-                return render(request, 'hod_template/add_course_template.html', context)
         else:
             messages.error(request, "Could Not Add")
-            return render(request, 'hod_template/add_course_template.html', context)
     return render(request, 'hod_template/add_course_template.html', context)
 
 
