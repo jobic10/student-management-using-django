@@ -69,10 +69,8 @@ def add_staff(request):
 
             except Exception as e:
                 messages.error(request, "Could Not Add " + str(e))
-                return render(request, 'hod_template/add_staff_template.html', context)
         else:
             messages.error(request, "Please fulfil all requirements")
-            return render(request, 'hod_template/add_staff_template.html', context)
 
     return render(request, 'hod_template/add_staff_template.html', context)
 
