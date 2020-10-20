@@ -339,11 +339,8 @@ def edit_subject(request, subject_id):
                 return redirect(reverse('edit_subject', args=[subject_id]))
             except Exception as e:
                 messages.error(request, "Could Not Add " + str(e))
-                return render(request, 'hod_template/edit_subject_template.html', context)
-
         else:
             messages.error(request, "Fill Form Properly")
-            return render(request, 'hod_template/edit_subject_template.html', context)
     return render(request, 'hod_template/edit_subject_template.html', context)
 
 
