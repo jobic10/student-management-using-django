@@ -95,8 +95,7 @@ def add_student(request):
             filename = fs.save(passport.name, passport)
             passport_url = fs.url(filename)
             try:
-                user = CustomUser.objects.create_user(
-                    email=email, password=password, user_type=3, first_name=first_name, last_name=last_name, profile_pic=passport_url)
+                user = CustomUser.objects.create_user(email=email, password=password, user_type=3, first_name=first_name, last_name=last_name, profile_pic=passport_url)
                 user.student.gender = gender
                 user.student.address = address
                 user.student.session = session
