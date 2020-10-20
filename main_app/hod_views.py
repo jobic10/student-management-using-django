@@ -235,10 +235,8 @@ def edit_staff(request, staff_id):
                 return redirect(reverse('edit_staff', args=[staff_id]))
             except Exception as e:
                 messages.error(request, "Could Not Update " + str(e))
-                return render(request, "hod_template/edit_staff_template.html", context)
         else:
             messages.error(request, "Please fil form properly")
-            return render(request, "hod_template/edit_staff_template.html", context)
     else:
         user = CustomUser.objects.get(id=staff_id)
         staff = Staff.objects.get(id=user.id)
