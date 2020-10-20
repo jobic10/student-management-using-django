@@ -355,12 +355,9 @@ def add_session(request):
                 return redirect(reverse('add_session'))
             except Exception as e:
                 messages.error(request, 'Could Not Add ' + str(e))
-                return render(request, "hod_template/add_session_template.html", context)
         else:
             messages.error(request, 'Fill Form Properly ')
-            return render(request, "hod_template/add_session_template.html", context)
-    else:
-        return render(request, "hod_template/add_session_template.html", context)
+    return render(request, "hod_template/add_session_template.html", context)
 
 
 def manage_session(request):
@@ -561,12 +558,8 @@ def admin_view_profile(request):
                 return redirect(reverse('admin_view_profile'))
             else:
                 messages.error(request, "Invalid Data Provided")
-                return render(request, "hod_template/admin_view_profile.html", context)
         except Exception as e:
-            messages.error(
-                request, "Error Occured While Updating Profile " + str(e))
-            return render(request, "hod_template/admin_view_profile.html", context)
-
+            messages.error(request, "Error Occured While Updating Profile " + str(e))
     return render(request, "hod_template/admin_view_profile.html", context)
 
 
