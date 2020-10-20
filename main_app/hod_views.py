@@ -286,11 +286,8 @@ def edit_student(request, student_id):
                 return redirect(reverse('edit_student', args=[student_id]))
             except Exception as e:
                 messages.error(request, "Could Not Update " + str(e))
-                return render(request, "hod_template/edit_student_template.html", context)
         else:
             messages.error(request, "Please Fill Form Properly!")
-            return render(request, "hod_template/edit_student_template.html", context)
-
     else:
         return render(request, "hod_template/edit_student_template.html", context)
 
@@ -311,13 +308,10 @@ def edit_course(request, course_id):
                 course.name = name
                 course.save()
                 messages.success(request, "Successfully Updated")
-                return render(request, 'hod_template/edit_course_template.html', context)
             except:
                 messages.error(request, "Could Not Update")
-                return render(request, 'hod_template/edit_course_template.html', context)
         else:
             messages.error(request, "Could Not Update")
-            return render(request, 'hod_template/edit_course_template.html', context)
 
     return render(request, 'hod_template/edit_course_template.html', context)
 
