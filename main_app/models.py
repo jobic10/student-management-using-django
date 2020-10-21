@@ -39,12 +39,14 @@ class Session(models.Model):
 
 
 class CustomUser(AbstractUser):
-    GENDER = [("M", "Male"), ("F", "Female")]
     USER_TYPE = ((1, "HOD"), (2, "Staff"), (3, "Student"))
+    GENDER = [("M", "Male"), ("F", "Female")]
+    
+    
     username = None  # Removed username, using email instead
     email = models.EmailField(unique=True)
     user_type = models.CharField(default=1, choices=USER_TYPE, max_length=1)
-    gender = models.CharField(max_length=1, choices=GENDER, default="M")
+    gender = models.CharField(max_length=1, choices=GENDER)
     profile_pic = models.ImageField()
     fcm_token = models.TextField(default="")  # For firebase notifications
     USERNAME_FIELD = "email"
