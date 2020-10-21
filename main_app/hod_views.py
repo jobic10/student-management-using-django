@@ -566,7 +566,7 @@ def admin_view_profile(request):
 def admin_notify_staff(request):
     staff = CustomUser.objects.filter(user_type=2)
     context = {
-        'page_tite': "Send Notifications To Staff",
+        'page_title': "Send Notifications To Staff",
         'allStaff': staff
     }
     return render(request, "hod_template/staff_notification.html", context)
@@ -575,7 +575,7 @@ def admin_notify_staff(request):
 def admin_notify_student(request):
     student = CustomUser.objects.filter(user_type=3)
     context = {
-        'page_tite': "Send Notifications To Students",
+        'page_title': "Send Notifications To Students",
         'students': student
     }
     return render(request, "hod_template/student_notification.html", context)
