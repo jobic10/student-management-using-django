@@ -5,8 +5,7 @@ from django.db.models.signals import post_save
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
-# Available Gender
-GENDER = [("M", "Male"), ("F", "Female")]
+
 
 
 class CustomUserManager(UserManager):
@@ -40,10 +39,12 @@ class Session(models.Model):
 
 
 class CustomUser(AbstractUser):
+    GENDER = [("M", "Male"), ("F", "Female")]
     USER_TYPE = ((1, "HOD"), (2, "Staff"), (3, "Student"))
     username = None  # Removed username, using email instead
     email = models.EmailField(unique=True)
     user_type = models.CharField(default=1, choices=USER_TYPE, max_length=1)
+    gender = models.CharField(max_length=1, choices=GENDER, default="M")
     profile_pic = models.ImageField()
     fcm_token = models.TextField(default="")  # For firebase notifications
     USERNAME_FIELD = "email"
@@ -73,7 +74,6 @@ class Student(models.Model):
     admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.DO_NOTHING, null=True, blank=False)
     session = models.ForeignKey(Session, on_delete=models.DO_NOTHING, null=True)
-    gender = models.CharField(max_length=1, choices=GENDER)
     address = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -85,7 +85,6 @@ class Student(models.Model):
 class Staff(models.Model):
     course = models.ForeignKey(Course, on_delete=models.DO_NOTHING, null=True, blank=False)
     admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    gender = models.CharField(max_length=1, choices=GENDER)
     address = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
