@@ -61,7 +61,7 @@ def add_staff(request):
                 user = CustomUser.objects.create_user(
                     email=email, password=password, user_type=2, first_name=first_name, last_name=last_name, profile_pic=passport_url)
                 user.gender = gender
-                user.staff.address = address
+                user.address = address
                 user.staff.course = course
                 user.save()
                 messages.success(request, "Successfully Added")
@@ -95,7 +95,7 @@ def add_student(request):
             try:
                 user = CustomUser.objects.create_user(email=email, password=password, user_type=3, first_name=first_name, last_name=last_name, profile_pic=passport_url)
                 user.gender = gender
-                user.student.address = address
+                user.address = address
                 user.student.session = session
                 user.student.course = course
                 user.save()
@@ -227,7 +227,7 @@ def edit_staff(request, staff_id):
                 user.first_name = first_name
                 user.last_name = last_name
                 user.gender = gender
-                staff.address = address
+                user.address = address
                 staff.course = course
                 user.save()
                 staff.save()
@@ -278,7 +278,7 @@ def edit_student(request, student_id):
                 user.last_name = last_name
                 student.session = session
                 user.gender = gender
-                student.address = address
+                user.address = address
                 student.course = course
                 user.save()
                 student.save()

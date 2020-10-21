@@ -161,7 +161,7 @@ def student_view_profile(request):
                     admin.profile_pic = passport_url
                 admin.first_name = first_name
                 admin.last_name = last_name
-                student.address = address
+                admin.address = address
                 admin.gender = gender
                 admin.save()
                 student.save()

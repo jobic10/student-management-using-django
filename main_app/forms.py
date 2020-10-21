@@ -17,9 +17,10 @@ class CustomUserForm(FormSettings):
     gender = forms.ChoiceField(choices=[('M', 'Male'), ('F', 'Female')])
     first_name = forms.CharField(required=True)
     last_name = forms.CharField(required=True)
+    address = forms.CharField(widget=forms.Textarea)
     password = forms.CharField(widget=forms.PasswordInput)
     widget = {
-        'password': forms.PasswordInput()
+        'password': forms.PasswordInput(),
     }
     profile_pic = forms.ImageField()
 
@@ -51,7 +52,7 @@ class CustomUserForm(FormSettings):
 
     class Meta:
         model = CustomUser
-        fields = ['first_name', 'last_name', 'email', 'gender',  'password','profile_pic', ]
+        fields = ['first_name', 'last_name', 'email', 'gender',  'password','profile_pic', 'address' ]
 
 
 class StudentForm(CustomUserForm):
@@ -61,7 +62,7 @@ class StudentForm(CustomUserForm):
     class Meta(CustomUserForm.Meta):
         model = Student
         fields = CustomUserForm.Meta.fields + \
-            ['course', 'address', 'session']
+            ['course', 'session']
 
 
 class AdminForm(CustomUserForm):
@@ -80,7 +81,7 @@ class StaffForm(CustomUserForm):
     class Meta(CustomUserForm.Meta):
         model = Staff
         fields = CustomUserForm.Meta.fields + \
-            ['course', 'address', ]
+            ['course' ]
 
 
 class CourseForm(FormSettings):
@@ -165,8 +166,7 @@ class StudentEditForm(CustomUserForm):
 
     class Meta(CustomUserForm.Meta):
         model = Student
-        fields = CustomUserForm.Meta.fields + \
-            ['address', ]
+        fields = CustomUserForm.Meta.fields 
 
 
 class StaffEditForm(CustomUserForm):
@@ -175,8 +175,7 @@ class StaffEditForm(CustomUserForm):
 
     class Meta(CustomUserForm.Meta):
         model = Staff
-        fields = CustomUserForm.Meta.fields + \
-            ['address', ]
+        fields = CustomUserForm.Meta.fields
 
 
 class EditResultForm(FormSettings):
