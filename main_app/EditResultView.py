@@ -27,8 +27,7 @@ class EditResultView(View):
                 test = form.cleaned_data.get('test')
                 exam = form.cleaned_data.get('exam')
                 # Validating
-                result = StudentResult.objects.get(
-                    student=student, subject=subject)
+                result = StudentResult.objects.get(student=student, subject=subject)
                 result.exam = exam
                 result.test = test
                 result.save()

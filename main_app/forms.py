@@ -49,7 +49,7 @@ class CustomUserForm(FormSettings):
 
     class Meta:
         model = CustomUser
-        fields = ['first_name', 'last_name','email', 'password', 'profile_pic', ]
+        fields = ['first_name', 'last_name','email', 'gender', 'password', 'profile_pic', ]
 
 
 class StudentForm(CustomUserForm):
@@ -58,7 +58,7 @@ class StudentForm(CustomUserForm):
 
     class Meta(CustomUserForm.Meta):
         model = Student
-        fields = CustomUserForm.Meta.fields + ['course', 'gender', 'address', 'session']
+        fields = CustomUserForm.Meta.fields + ['course', 'address', 'session']
 
 
 class AdminForm(CustomUserForm):
@@ -76,7 +76,7 @@ class StaffForm(CustomUserForm):
 
     class Meta(CustomUserForm.Meta):
         model = Staff
-        fields = CustomUserForm.Meta.fields + ['course', 'gender', 'address' ]
+        fields = CustomUserForm.Meta.fields + ['course', 'address' ]
 
 
 class CourseForm(FormSettings):
@@ -161,7 +161,7 @@ class StudentEditForm(CustomUserForm):
 
     class Meta(CustomUserForm.Meta):
         model = Student
-        fields = CustomUserForm.Meta.fields + ['gender', 'address', ]
+        fields = CustomUserForm.Meta.fields + ['address', ]
 
 
 class StaffEditForm(CustomUserForm):
@@ -170,7 +170,7 @@ class StaffEditForm(CustomUserForm):
 
     class Meta(CustomUserForm.Meta):
         model = Staff
-        fields = CustomUserForm.Meta.fields + ['gender', 'address', ]
+        fields = CustomUserForm.Meta.fields + ['address']
 
 
 class EditResultForm(FormSettings):
