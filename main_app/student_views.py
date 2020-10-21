@@ -162,7 +162,7 @@ def student_view_profile(request):
                 admin.first_name = first_name
                 admin.last_name = last_name
                 student.address = address
-                student.gender = gender
+                admin.gender = gender
                 admin.save()
                 student.save()
                 messages.success(request, "Profile Updated!")

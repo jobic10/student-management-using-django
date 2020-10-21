@@ -14,6 +14,7 @@ class FormSettings(forms.ModelForm):
 
 class CustomUserForm(FormSettings):
     email = forms.EmailField(required=True)
+    gender = forms.ChoiceField(choices=[('M', 'Male'), ('F', 'Female')])
     first_name = forms.CharField(required=True)
     last_name = forms.CharField(required=True)
     password = forms.CharField(widget=forms.PasswordInput)
@@ -44,14 +45,13 @@ class CustomUserForm(FormSettings):
                 id=self.instance.pk).admin.email.lower()
             if dbEmail != formEmail:  # There has been changes
                 if CustomUser.objects.filter(email=formEmail).exists():
-                    raise forms.ValidationError(
-                        "The given email is already registered")
+                    raise forms.ValidationError("The given email is already registered")
 
         return formEmail
 
     class Meta:
         model = CustomUser
-        fields = ['first_name', 'last_name', 'email', 'password','gender' , 'profile_pic', ]
+        fields = ['first_name', 'last_name', 'email', 'gender',  'password','profile_pic', ]
 
 
 class StudentForm(CustomUserForm):

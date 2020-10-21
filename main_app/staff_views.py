@@ -215,7 +215,7 @@ def staff_view_profile(request):
                 admin.first_name = first_name
                 admin.last_name = last_name
                 staff.address = address
-                staff.gender = gender
+                admin.gender = gender
                 admin.save()
                 staff.save()
                 messages.success(request, "Profile Updated!")
