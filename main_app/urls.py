@@ -24,7 +24,6 @@ urlpatterns = [
     path("get_attendance", views.get_attendance, name='get_attendance'),
     path("firebase-messaging-sw.js", views.showFirebaseJS, name='showFirebaseJS'),
     path("doLogin/", views.doLogin, name='user_login'),
-    path("get_user_details/", views.getUserDetails, name='get_user_details'),
     path("logout_user/", views.logout_user, name='user_logout'),
     path("admin_home/", hod_views.admin_home, name='admin_home'),
     path("add_staff/", hod_views.add_staff, name='add_staff'),

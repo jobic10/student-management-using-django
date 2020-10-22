@@ -27,6 +27,7 @@ def doLogin(request, **kwargs):
     if request.method != 'POST':
         return HttpResponse("<h4>Denied</h4>")
     else:
+        #Google recaptcha
         captcha_token = request.POST.get('g-recaptcha-response')
         captcha_url = "https://www.google.com/recaptcha/api/siteverify"
         captcha_key = "6LfswtgZAAAAABX9gbLqe-d97qE2g1JP8oUYritJ"
@@ -59,12 +60,6 @@ def doLogin(request, **kwargs):
             messages.error(request, "Invalid details")
             return redirect("/")
 
-
-def getUserDetails(request):
-    if request.user != None:
-        return HttpResponse("User: " + request.user.email + "User Type " + request.user.user_type)
-    else:
-        return HttpResponse("Please Login")
 
 
 def logout_user(request):
