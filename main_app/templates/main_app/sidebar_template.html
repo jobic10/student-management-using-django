@@ -444,7 +444,7 @@
 
 
 <li class="nav-item">
-    <a href="{% url 'user_logout' %}" class="nav-link">
+    <a href="{% url 'user_logout' %}" onclick="return confirm('Your session would be terminated.\n\nProceed?')" class="nav-link">
         <i class="nav-icon fas fa-th"></i>
         <p>
             Logout
