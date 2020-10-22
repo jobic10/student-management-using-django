@@ -65,7 +65,7 @@ def add_staff(request):
                 user.staff.course = course
                 user.save()
                 messages.success(request, "Successfully Added")
-                return render(request, 'hod_template/add_staff_template.html', {'form': StaffForm()})
+                return redirect(reverse('add_staff'))
 
             except Exception as e:
                 messages.error(request, "Could Not Add " + str(e))
