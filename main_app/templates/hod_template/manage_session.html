@@ -29,7 +29,7 @@
                                     <td>{{ forloop.counter }}</td>
                                     <td>{{session.start_year}}</td>
                                     <td>{{session.end_year}}</td>
-                                    <td><a href="/edit_session/{{session.id}}" class="btn btn-primary">Edit</a></td>
+                                    <td><a href="{% url 'edit_session' session.id %}" class="btn btn-primary">Edit</a></td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
