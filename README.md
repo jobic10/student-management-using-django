@@ -8,6 +8,9 @@ Feel free to make changes based on your requirements.
 [Project Demo on YouTube](https://www.youtube.com/watch?v=kArCR96m7uo "Django Student Management System Demo")
 
 And if you like this project, then ADD a STAR ⭐️  to this project 👆
+## Deployed to
+https://smswithdjango.herokuapp.com/
+
 
 ## Features of this Project
 
