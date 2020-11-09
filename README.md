@@ -139,14 +139,14 @@ $  cd student-management-using-django
 $  pip3 install -r requirements.txt
 ```
 
-**5. Add the hosts (Skip this step)**
+**5. Add the hosts**
 
 - Got to settings.py file 
-- Then, On allowed hosts, Add [‘*’]. 
+- Then, On allowed hosts, Use **[]** as your host. 
 ```python
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 ```
-*No need to change on Mac.*
+*Do not use the fault allowed settings in this repo. It has security risk!*
 
 
 **6. Now Run Server**
