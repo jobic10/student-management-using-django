@@ -42,8 +42,11 @@
                                             src="{{staff.profile_pic}}" alt="">
                                         {% endif %}
                                     </td>
-                                    <td><a href="
-                                        {% url 'edit_staff' staff.staff.id %}" class="btn btn-primary">Edit</a></td>
+                                    <td>
+                                        <a href="{% url 'edit_staff' staff.staff.id %}" class="btn btn-primary">Edit</a> - 
+                                        <a href="{% url 'delete_staff' staff.staff.id %}" class="btn btn-danger" onclick="return confirm('Are you sure about this ?')">Delete</a>
+                                    
+                                    </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>

@@ -93,7 +93,8 @@ def add_student(request):
             filename = fs.save(passport.name, passport)
             passport_url = fs.url(filename)
             try:
-                user = CustomUser.objects.create_user(email=email, password=password, user_type=3, first_name=first_name, last_name=last_name, profile_pic=passport_url)
+                user = CustomUser.objects.create_user(
+                    email=email, password=password, user_type=3, first_name=first_name, last_name=last_name, profile_pic=passport_url)
                 user.gender = gender
                 user.address = address
                 user.student.session = session
@@ -559,7 +560,8 @@ def admin_view_profile(request):
             else:
                 messages.error(request, "Invalid Data Provided")
         except Exception as e:
-            messages.error(request, "Error Occured While Updating Profile " + str(e))
+            messages.error(
+                request, "Error Occured While Updating Profile " + str(e))
     return render(request, "hod_template/admin_view_profile.html", context)
 
 
@@ -633,3 +635,10 @@ def send_staff_notification(request):
         return HttpResponse("True")
     except Exception as e:
         return HttpResponse("False")
+
+
+def delete_staff(request, staff_id):
+    staff = get_object_or_404(CustomUser, staff__id=staff_id)
+    staff.delete()
+    messages.success(request, "Staff deleted successfully!")
+    return redirect(reverse('manage_staff'))
