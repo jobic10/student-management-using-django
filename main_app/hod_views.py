@@ -649,3 +649,28 @@ def delete_student(request, student_id):
     student.delete()
     messages.success(request, "Student deleted successfully!")
     return redirect(reverse('manage_student'))
+
+
+def delete_course(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    try:
+        course.delete()
+        messages.success(request, "Course deleted successfully!")
+    except Exception:
+        messages.error(
+            request, "Sorry, some students are assigned to this course already. Kindly change the affected student course and try again")
+    return redirect(reverse('manage_course'))
+
+
+def delete_subject(request, subject_id):
+    subject = get_object_or_404(Subject, id=subject_id)
+    subject.delete()
+    messages.success(request, "Subject deleted successfully!")
+    return redirect(reverse('manage_subject'))
+
+
+def delete_session(request, session_id):
+    session = get_object_or_404(Session, id=session_id)
+    session.delete()
+    messages.success(request, "Session deleted successfully!")
+    return redirect(reverse('manage_session'))
