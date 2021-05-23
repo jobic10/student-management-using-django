@@ -68,6 +68,7 @@
                             <h1 class="m-0 text-dark">{% block page_title %}{% endblock page_title %}</h1>
                         </div><!-- /.col -->
                         <div class="col-sm-6">
+                            
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="#">Home</a></li>
                                 <li class="breadcrumb-item active">{{ page_title }}</li>
@@ -79,6 +80,29 @@
             <!-- /.content-header -->
 
             <!-- Main content -->
+            
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+            <div class="form-group">
+                {% if messages %}
+                {% for message in messages  %}
+    
+                {% if message.tags == 'success' %}
+                <div class="alert alert-success">
+                    {{message}}
+                </div>
+                {% else %}
+                <div class="alert alert-danger">
+                    {{message}}
+                </div>
+                {% endif %}
+    
+                {% endfor %}
+                {% endif %}
+            </div>
+            </div></div></div></section>
             {% block content %}
 
             {% endblock content %}

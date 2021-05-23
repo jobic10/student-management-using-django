@@ -37,16 +37,6 @@
                     <div class="card-header">
                         <h3 class="card-title">{{page_title}}</h3>
                     </div>
-
-                    {% if messages %}
-                    {% for message in messages  %}
-
-                    <div class="alert-{{message.tags}} alert">
-                        {{message}}
-                    </div>
-                    {% endfor %}
-                    {% endif %}
-
                     <!-- /.card-header -->
                     <!-- form start -->
                     <div class="card-body">
