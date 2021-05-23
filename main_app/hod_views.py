@@ -642,3 +642,10 @@ def delete_staff(request, staff_id):
     staff.delete()
     messages.success(request, "Staff deleted successfully!")
     return redirect(reverse('manage_staff'))
+
+
+def delete_student(request, student_id):
+    student = get_object_or_404(CustomUser, student__id=student_id)
+    student.delete()
+    messages.success(request, "Student deleted successfully!")
+    return redirect(reverse('manage_student'))

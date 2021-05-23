@@ -43,7 +43,9 @@
                                         {% endif %}
                                     </td>
                                     
-                                    <td><a href="{% url 'edit_student' student.student.id %}" class="btn btn-primary">Edit</a>
+                                    <td><a href="{% url 'edit_student' student.student.id %}" class="btn btn-primary">Edit</a> -
+                                        <a href="{% url 'delete_student' student.student.id %}" class="btn btn-danger" onclick="return confirm('Are you sure about this ?')">Delete</a>
+
                                     </td>
                                 </tr>
                                 {% endfor %}
