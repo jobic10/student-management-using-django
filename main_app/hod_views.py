@@ -671,6 +671,10 @@ def delete_subject(request, subject_id):
 
 def delete_session(request, session_id):
     session = get_object_or_404(Session, id=session_id)
-    session.delete()
-    messages.success(request, "Session deleted successfully!")
+    try:
+        session.delete()
+        messages.success(request, "Session deleted successfully!")
+    except Exception:
+        messages.error(
+            request, "There are students assigned to this session. Please move them to another session.")
     return redirect(reverse('manage_session'))
