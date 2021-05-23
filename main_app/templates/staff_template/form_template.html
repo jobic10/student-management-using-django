@@ -1,23 +1,6 @@
 <form role="form" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="card-body">
-        <div class="form-group">
-            {% if messages %}
-            {% for message in messages  %}
-
-            {% if message.tags == 'success' %}
-            <div class="alert alert-success">
-                {{message}}
-            </div>
-            {% else %}
-            <div class="alert alert-danger">
-                {{message}}
-            </div>
-            {% endif %}
-
-            {% endfor %}
-            {% endif %}
-        </div>
 
         {% for field in form  %}
         <div class="form-group">
