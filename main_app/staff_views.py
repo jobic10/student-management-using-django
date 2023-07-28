@@ -71,6 +71,7 @@ def get_students(request):
         return e
 
 
+
 @csrf_exempt
 def save_attendance(request):
     student_data = request.POST.get('student_ids')
@@ -81,13 +82,21 @@ def save_attendance(request):
     try:
         session = get_object_or_404(Session, id=session_id)
         subject = get_object_or_404(Subject, id=subject_id)
-        attendance = Attendance(session=session, subject=subject, date=date)
-        attendance.save()
+
+        # Check if an attendance object already exists for the given date and session
+        attendance, created = Attendance.objects.get_or_create(session=session, subject=subject, date=date)
 
         for student_dict in students:
             student = get_object_or_404(Student, id=student_dict.get('id'))
-            attendance_report = AttendanceReport(student=student, attendance=attendance, status=student_dict.get('status'))
-            attendance_report.save()
+
+            # Check if an attendance report already exists for the student and the attendance object
+            attendance_report, report_created = AttendanceReport.objects.get_or_create(student=student, attendance=attendance)
+
+            # Update the status only if the attendance report was newly created
+            if report_created:
+                attendance_report.status = student_dict.get('status')
+                attendance_report.save()
+
     except Exception as e:
         return None
 
