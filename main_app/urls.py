@@ -57,10 +57,12 @@ urlpatterns = [
          name='get_admin_attendance'),
     path("student/add/", hod_views.add_student, name='add_student'),
     path("subject/add/", hod_views.add_subject, name='add_subject'),
+    path("activity/add/", hod_views.add_activity, name='add_activity'),
     path("staff/manage/", hod_views.manage_staff, name='manage_staff'),
     path("student/manage/", hod_views.manage_student, name='manage_student'),
     path("course/manage/", hod_views.manage_course, name='manage_course'),
     path("subject/manage/", hod_views.manage_subject, name='manage_subject'),
+    path("activity/manage/", hod_views.manage_activity, name='manage_activity'),
     path("staff/edit/<int:staff_id>", hod_views.edit_staff, name='edit_staff'),
     path("staff/delete/<int:staff_id>",
          hod_views.delete_staff, name='delete_staff'),
@@ -70,6 +72,9 @@ urlpatterns = [
 
     path("subject/delete/<int:subject_id>",
          hod_views.delete_subject, name='delete_subject'),
+
+     path("activity/delete/<int:activity_id>",
+         hod_views.delete_activity, name='delete_activity'),
 
     path("session/delete/<int:session_id>",
          hod_views.delete_session, name='delete_session'),
@@ -82,6 +87,8 @@ urlpatterns = [
          hod_views.edit_course, name='edit_course'),
     path("subject/edit/<int:subject_id>",
          hod_views.edit_subject, name='edit_subject'),
+     path("activity/edit/<int:activity_id>",
+         hod_views.edit_activity, name='edit_activity'),
 
 
     # Staff

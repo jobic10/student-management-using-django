@@ -64,7 +64,7 @@ class StudentForm(CustomUserForm):
         fields = CustomUserForm.Meta.fields + \
             ['course', 'session']
 
-
+  
 class AdminForm(CustomUserForm):
     def __init__(self, *args, **kwargs):
         super(AdminForm, self).__init__(*args, **kwargs)
@@ -101,6 +101,15 @@ class SubjectForm(FormSettings):
     class Meta:
         model = Subject
         fields = ['name', 'staff', 'course']
+
+
+class ActivityForm(FormSettings):
+    def __init__(self, *args, **kwargs):
+        super(ActivityForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Activity
+        fields = ['name', 'organiser', 'date_time', 'venue', 'slots']
 
 
 class SessionForm(FormSettings):

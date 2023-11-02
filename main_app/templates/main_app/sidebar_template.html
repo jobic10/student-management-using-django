@@ -231,6 +231,28 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    {% url 'add_activity' as add_activity %}
+                    <a href="{{add_activity}}" class="nav-link  {% if add_activity == request.path %} active {% endif %}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Add Activity
+
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    {% url 'manage_activity' as manage_activity %}
+                    {% url 'edit_activity' activity_id as edit_activity %}
+                    <a href="{{manage_activity}}"
+                        class="nav-link  {% if edit_activity == request.path or manage_activity == request.path %} active {% endif %}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Manage Activity
+
+                        </p>
+                    </a>
+                </li>
                 
 {% elif request.user.user_type == '2' %}
     <!-- Brand Logo -->

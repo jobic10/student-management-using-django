@@ -109,6 +109,38 @@ def add_student(request):
     return render(request, 'hod_template/add_student_template.html', context)
 
 
+def add_activity(request):
+    form = ActivityForm(request.POST or None)
+    context = {
+        'form': form,
+        'page_title': "Add Activity"
+    }
+    if request.method == 'POST':
+        if form.is_valid():
+            name = form.cleaned_data.get('name')
+            organiser = form.cleaned_data.get('organiser')
+            date_time = form.cleaned_data.get('date_time')
+            venue = form.cleaned_data.get('venue')
+            slots = form.cleaned_data.get('slots')
+            try:
+                activity = Activity()
+                activity.name = name
+                activity.organiser = organiser
+                activity.date_time = date_time
+                activity.venue = venue
+                activity.slots = slots
+                activity.save()
+                messages.success(request, "Successfully Added")
+                return redirect(reverse("add_activity"))
+
+            except Exception as e:
+                messages.ERROR(request, "Could Not Add " + str(e))
+        else:
+            messages.error(request, "Fill Form Properly")
+
+    return render(request, 'hod_template/add_activity_template.html', context)
+
+
 def add_course(request):
     form = CourseForm(request.POST or None)
     context = {
@@ -193,6 +225,15 @@ def manage_subject(request):
         'page_title': 'Manage Subjects'
     }
     return render(request, "hod_template/manage_subject.html", context)
+
+
+def manage_activity(request):
+    activities = Activity.objects.all()
+    context = {
+        'activities': activities,
+        'page_title': 'Manage Activities'
+    }
+    return render(request, "hod_template/manage_activity.html", context)
 
 
 def edit_staff(request, staff_id):
@@ -343,6 +384,38 @@ def edit_subject(request, subject_id):
         else:
             messages.error(request, "Fill Form Properly")
     return render(request, 'hod_template/edit_subject_template.html', context)
+
+
+def edit_activity(request, activity_id):
+    instance = get_object_or_404(Activity, id=activity_id)
+    form = ActivityForm(request.POST or None, instance=instance)
+    context = {
+        'form': form,
+        'activity_id': activity_id,
+        'page_title': 'Edit Activity'
+    }
+    if request.method == 'POST':
+        if form.is_valid():
+            name = form.cleaned_data.get('name')
+            organiser = form.cleaned_data.get('organiser')
+            date_time = form.cleaned_data.get('date_time')
+            venue = form.cleaned_data.get('venue')
+            slots = form.cleaned_data.get('slots')
+            try:
+                activity = Activity.objects.get(id=activity_id)
+                activity.name = name
+                activity.organiser = organiser
+                activity.date_time = date_time
+                activity.venue = venue
+                activity.slots = slots
+                activity.save()
+                messages.success(request, "Successfully Updated")
+                return redirect(reverse('edit_activity', args=[activity_id]))
+            except Exception as e:
+                messages.error(request, "Could Not Add " + str(e))
+        else:
+            messages.error(request, "Fill Form Properly")
+    return render(request, 'hod_template/edit_activity_template.html', context)
 
 
 def add_session(request):
@@ -667,6 +740,13 @@ def delete_subject(request, subject_id):
     subject.delete()
     messages.success(request, "Subject deleted successfully!")
     return redirect(reverse('manage_subject'))
+
+
+def delete_activity(request, activity_id):
+    activity = get_object_or_404(Activity, id=activity_id)
+    activity.delete()
+    messages.success(request, "Activity deleted successfully!")
+    return redirect(reverse('manage_activity'))
 
 
 def delete_session(request, session_id):
