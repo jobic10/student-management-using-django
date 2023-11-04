@@ -168,13 +168,20 @@ class NotificationStudent(models.Model):
 
 class Activity(models.Model):
     name = models.CharField(max_length=120)
-    organiser = models.ForeignKey(Staff, on_delete=models.CASCADE)
+    organiser = models.ForeignKey(Staff, on_delete=models.SET_NULL, null=True)
     date_time = models.DateTimeField()
     venue = models.CharField(max_length=120)
     slots = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     # logo = models.ImageField()
+
+
+class ActivityStudent(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
+    status = models.SmallIntegerField(default=0)
+
 
 class StudentResult(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)

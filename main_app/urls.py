@@ -136,5 +136,8 @@ urlpatterns = [
          name="student_view_notification"),
     path('student/view/result/', student_views.student_view_result,
          name='student_view_result'),
-
+    path('student/view/activity/', student_views.student_view_activity,
+         name='student_view_activity'),
+#     path('student/enroll/activity/', student_views.student_enroll_activity,
+#          name='student_enroll_activity'),
 ]

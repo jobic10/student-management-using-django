@@ -1,0 +1,55 @@
+{% extends 'main_app/base.html' %}
+{% load static %}
+{% block page_title %}{{page_title}}{% endblock page_title %}
+
+{% block content %}
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- general form elements -->
+       
+                <!-- /.card -->
+<div class="card card-primary">
+    <div class="card-header"><h3 class="card-title">{{page_title}}</h3>
+    </div>
+   <div class="table p-2">
+
+       <table class="table table-bordered">
+           <tr>
+               <th>ID</th>
+               <th>Activity</th>
+               <th>Organiser</th>
+               <th>Time</th>
+               <th>Venue</th>
+               <th>Slots</th>
+               <th>Enrollment Status</th>
+        </tr>
+        {% for activity in activities %}
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{ activity.name }}</td>
+            <td>{{ activity.organiser }}</td>
+            <td>{{ activity.date_time }}</td>
+            <td>{{ activity.venue }}</td>
+            <td>{{ activity.slots }}</td>
+            {% if activity.status == 1 %}
+            <td><span  class='badge badge-success'>Approved</span></td>
+            {% elif activity.status == -1 %}
+            <td><span  class='badge badge-danger'>Rejected</span></td>
+            {% elif activity.status == 0 %}
+            <td><span class="badge badge-warning">Pending</span></td>
+            <!-- {% elif activity.status == -2 %}
+            <td><a href="{% url 'student_enroll_activity' activity.id %}" class="btn btn-primary">Enroll</a></td> -->
+            {% endif %}    
+        </tr>
+            {% endfor %}
+        </table>
+    </div>
+    </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

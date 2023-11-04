@@ -205,3 +205,51 @@ def student_view_result(request):
         'page_title': "View Results"
     }
     return render(request, "student_template/student_view_result.html", context)
+
+
+def student_view_activity(request):
+    '''
+    Status:
+        1: Approved
+        0: Applied
+        -1: Rejected
+        -2: Not Applied
+    '''
+    stu = get_object_or_404(Student, admin=request.user)
+    activities = Activity.objects.all().values()
+    for x in range(len(activities)):
+        print(activities[x]['name'])
+        stu_status = ActivityStudent.objects.filter(student=stu, activity=activities[x]['id']).values()
+        if len(stu_status) == 1:
+            activities[x]['status'] = stu_status[0]['status']
+        else:
+            activities[x]['status'] = -2
+
+    context = {
+        'activities': activities,
+        'page_title': "Activities"
+    }
+    return render(request,"student_template/student_view_activity.html", context)
+
+
+# def student_enroll_activity(request, activity_id):
+#     student = get_object_or_404(Student, admin=request.user)
+#     activity = Activity.objects.get(id=activity_id)
+#     context = {
+#         'activities': Activity.objects.all().values(),
+#         'page_title': "Activities"
+#     }
+#     if request.method == 'POST':
+#         try:
+#             enrollment = ActivityStudent()
+#             enrollment.activity = activity
+#             enrollment.student = student
+#             enrollment.status = 0
+#             enrollment.save()
+#             messages.success(request,"Successfully Applied")
+#             return render(request,"student_template/student_view_activity.html", context)
+#         except Exception as e:
+#             messages.error(request, "Could Not Apply for activity " + str(e))
+
+    
+#     return render(request,"student_template/student_view_activity.html", context)

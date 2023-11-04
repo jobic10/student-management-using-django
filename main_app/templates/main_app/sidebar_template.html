@@ -461,6 +461,16 @@
                 </li>
 
                 <li class="nav-item">
+                    {% url 'student_view_activity' as student_view_activity %}
+                    <a href="{% url 'student_view_activity' %}" class="nav-link {% if student_view_activity == request.path %} active {% endif %}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            View Activities
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     {% url 'student_feedback' as student_feedback %}
                     <a href="{{student_feedback}}" class="nav-link {% if student_feedback == request.path %} active {% endif %}">
                         <i class="nav-icon fas fa-th"></i>
