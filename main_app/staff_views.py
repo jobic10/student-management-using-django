@@ -134,7 +134,7 @@ def get_student_attendance(request):
 
 
 @csrf_exempt
-def update_attendance(request):
+def update_student_attendance(request):
     student_data = request.POST.get('student_ids')
     date = request.POST.get('date')
     students = json.loads(student_data)

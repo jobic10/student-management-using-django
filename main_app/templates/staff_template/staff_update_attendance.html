@@ -182,7 +182,7 @@ if (attendance_date.length  == 0){
             student_data = JSON.stringify(student_data)
             var attendance_date = $("#attendance_date").val()
             $.ajax({
-                url: "{% url 'update_attendance' %}",
+                url: "{% url 'update_student_attendance' %}",
                 type: 'POST',
                 data: {
                     date: attendance_date,
