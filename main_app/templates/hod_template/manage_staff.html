@@ -44,7 +44,7 @@
                                     </td>
                                     <td>
                                         <a href="{% url 'edit_staff' staff.staff.id %}" class="btn btn-primary">Edit</a> - 
-                                        <a href="{% url 'delete_staff' staff.staff.id %}" class="btn btn-danger" onclick="return confirm('Are you sure about this ?')">Delete</a>
+                                        <form method="post" action="{% url 'delete_staff' staff.staff.id %}" style="display:inline" onsubmit="return confirm('Are you sure about this ?')">{% csrf_token %}<button type="submit" class="btn btn-danger">Delete</button></form>
                                     
                                     </td>
                                 </tr>
