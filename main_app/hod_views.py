@@ -1,33 +1,61 @@
 import json
+import logging
+
 import requests
+from django.conf import settings
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
+from django.db.models import Count
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import (HttpResponse, HttpResponseRedirect,
                               get_object_or_404, redirect, render)
 from django.templatetags.static import static
 from django.urls import reverse
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 from django.views.generic import UpdateView
 
 from .forms import *
 from .models import *
 
+logger = logging.getLogger(__name__)
+
+
+def send_fcm_notification(token, message, click_action):
+    """Send a push notification through Firebase Cloud Messaging.
+
+    The server key is read from the FCM_SERVER_KEY setting / environment
+    variable. If it is not configured, the push is skipped (the notification
+    is still stored and shown in the app).
+    """
+    if not settings.FCM_SERVER_KEY or not token:
+        return
+    body = {
+        'notification': {
+            'title': "Student Management System",
+            'body': message,
+            'click_action': click_action,
+            'icon': static('dist/img/AdminLTELogo.png')
+        },
+        'to': token
+    }
+    headers = {'Authorization': 'key=' + settings.FCM_SERVER_KEY,
+               'Content-Type': 'application/json'}
+    try:
+        requests.post("https://fcm.googleapis.com/fcm/send",
+                      data=json.dumps(body), headers=headers, timeout=10)
+    except requests.RequestException:
+        logger.warning("Could not send FCM notification", exc_info=True)
+
 
 def admin_home(request):
     total_staff = Staff.objects.all().count()
     total_students = Student.objects.all().count()
-    subjects = Subject.objects.all()
-    total_subject = subjects.count()
+    # One query for every subject together with its attendance count
+    subjects = list(Subject.objects.annotate(attendance_count=Count('attendance')))
+    total_subject = len(subjects)
     total_course = Course.objects.all().count()
-    attendance_list = Attendance.objects.filter(subject__in=subjects)
-    total_attendance = attendance_list.count()
-    attendance_list = []
-    subject_list = []
-    for subject in subjects:
-        attendance_count = Attendance.objects.filter(subject=subject).count()
-        subject_list.append(subject.name[:7])
-        attendance_list.append(attendance_count)
+    subject_list = [subject.name[:7] for subject in subjects]
+    attendance_list = [subject.attendance_count for subject in subjects]
     context = {
         'page_title': "Administrative Dashboard",
         'total_students': total_students,
@@ -160,7 +188,7 @@ def add_subject(request):
 
 
 def manage_staff(request):
-    allStaff = CustomUser.objects.filter(user_type=2)
+    allStaff = CustomUser.objects.filter(user_type=2).select_related('staff__course')
     context = {
         'allStaff': allStaff,
         'page_title': 'Manage Staff'
@@ -169,7 +197,7 @@ def manage_staff(request):
 
 
 def manage_student(request):
-    students = CustomUser.objects.filter(user_type=3)
+    students = CustomUser.objects.filter(user_type=3).select_related('student__course')
     context = {
         'students': students,
         'page_title': 'Manage Students'
@@ -187,7 +215,7 @@ def manage_course(request):
 
 
 def manage_subject(request):
-    subjects = Subject.objects.all()
+    subjects = Subject.objects.select_related('course', 'staff__admin')
     context = {
         'subjects': subjects,
         'page_title': 'Manage Subjects'
@@ -238,10 +266,7 @@ def edit_staff(request, staff_id):
                 messages.error(request, "Could Not Update " + str(e))
         else:
             messages.error(request, "Please fil form properly")
-    else:
-        user = CustomUser.objects.get(id=staff_id)
-        staff = Staff.objects.get(id=user.id)
-        return render(request, "hod_template/edit_staff_template.html", context)
+    return render(request, "hod_template/edit_staff_template.html", context)
 
 
 def edit_student(request, student_id):
@@ -289,8 +314,7 @@ def edit_student(request, student_id):
                 messages.error(request, "Could Not Update " + str(e))
         else:
             messages.error(request, "Please Fill Form Properly!")
-    else:
-        return render(request, "hod_template/edit_student_template.html", context)
+    return render(request, "hod_template/edit_student_template.html", context)
 
 
 def edit_course(request, course_id):
@@ -390,7 +414,7 @@ def edit_session(request, session_id):
         return render(request, "hod_template/edit_session_template.html", context)
 
 
-@csrf_exempt
+@require_POST
 def check_email_availability(request):
     email = request.POST.get("email")
     try:
@@ -402,10 +426,9 @@ def check_email_availability(request):
         return HttpResponse(False)
 
 
-@csrf_exempt
 def student_feedback_message(request):
     if request.method != 'POST':
-        feedbacks = FeedbackStudent.objects.all()
+        feedbacks = FeedbackStudent.objects.select_related('student__admin', 'student__session')
         context = {
             'feedbacks': feedbacks,
             'page_title': 'Student Feedback Messages'
@@ -423,10 +446,9 @@ def student_feedback_message(request):
             return HttpResponse(False)
 
 
-@csrf_exempt
 def staff_feedback_message(request):
     if request.method != 'POST':
-        feedbacks = FeedbackStaff.objects.all()
+        feedbacks = FeedbackStaff.objects.select_related('staff__admin', 'staff__course')
         context = {
             'feedbacks': feedbacks,
             'page_title': 'Staff Feedback Messages'
@@ -444,10 +466,9 @@ def staff_feedback_message(request):
             return HttpResponse(False)
 
 
-@csrf_exempt
 def view_staff_leave(request):
     if request.method != 'POST':
-        allLeave = LeaveReportStaff.objects.all()
+        allLeave = LeaveReportStaff.objects.select_related('staff__admin', 'staff__course')
         context = {
             'allLeave': allLeave,
             'page_title': 'Leave Applications From Staff'
@@ -466,13 +487,12 @@ def view_staff_leave(request):
             leave.save()
             return HttpResponse(True)
         except Exception as e:
-            return False
+            return HttpResponse(False)
 
 
-@csrf_exempt
 def view_student_leave(request):
     if request.method != 'POST':
-        allLeave = LeaveReportStudent.objects.all()
+        allLeave = LeaveReportStudent.objects.select_related('student__admin', 'student__course')
         context = {
             'allLeave': allLeave,
             'page_title': 'Leave Applications From Students'
@@ -491,7 +511,7 @@ def view_student_leave(request):
             leave.save()
             return HttpResponse(True)
         except Exception as e:
-            return False
+            return HttpResponse(False)
 
 
 def admin_view_attendance(request):
@@ -506,7 +526,6 @@ def admin_view_attendance(request):
     return render(request, "hod_template/admin_view_attendance.html", context)
 
 
-@csrf_exempt
 def get_admin_attendance(request):
     subject_id = request.POST.get('subject')
     session_id = request.POST.get('session')
@@ -515,9 +534,9 @@ def get_admin_attendance(request):
         subject = get_object_or_404(Subject, id=subject_id)
         session = get_object_or_404(Session, id=session_id)
         attendance = get_object_or_404(
-            Attendance, id=attendance_date_id, session=session)
+            Attendance, id=attendance_date_id, session=session, subject=subject)
         attendance_reports = AttendanceReport.objects.filter(
-            attendance=attendance)
+            attendance=attendance).select_related('student__admin')
         json_data = []
         for report in attendance_reports:
             data = {
@@ -527,7 +546,7 @@ def get_admin_attendance(request):
             json_data.append(data)
         return JsonResponse(json.dumps(json_data), safe=False)
     except Exception as e:
-        return None
+        return HttpResponse(status=404)
 
 
 def admin_view_profile(request):
@@ -566,7 +585,7 @@ def admin_view_profile(request):
 
 
 def admin_notify_staff(request):
-    staff = CustomUser.objects.filter(user_type=2)
+    staff = CustomUser.objects.filter(user_type=2).select_related('staff__course')
     context = {
         'page_title': "Send Notifications To Staff",
         'allStaff': staff
@@ -575,7 +594,7 @@ def admin_notify_staff(request):
 
 
 def admin_notify_student(request):
-    student = CustomUser.objects.filter(user_type=3)
+    student = CustomUser.objects.filter(user_type=3).select_related('student__course')
     context = {
         'page_title': "Send Notifications To Students",
         'students': student
@@ -583,60 +602,37 @@ def admin_notify_student(request):
     return render(request, "hod_template/student_notification.html", context)
 
 
-@csrf_exempt
+@require_POST
 def send_student_notification(request):
     id = request.POST.get('id')
     message = request.POST.get('message')
-    student = get_object_or_404(Student, admin_id=id)
+    student = get_object_or_404(Student.objects.select_related('admin'), admin_id=id)
     try:
-        url = "https://fcm.googleapis.com/fcm/send"
-        body = {
-            'notification': {
-                'title': "Student Management System",
-                'body': message,
-                'click_action': reverse('student_view_notification'),
-                'icon': static('dist/img/AdminLTELogo.png')
-            },
-            'to': student.admin.fcm_token
-        }
-        headers = {'Authorization':
-                   'key=AAAA3Bm8j_M:APA91bElZlOLetwV696SoEtgzpJr2qbxBfxVBfDWFiopBWzfCfzQp2nRyC7_A2mlukZEHV4g1AmyC6P_HonvSkY2YyliKt5tT3fe_1lrKod2Daigzhb2xnYQMxUWjCAIQcUexAMPZePB',
-                   'Content-Type': 'application/json'}
-        data = requests.post(url, data=json.dumps(body), headers=headers)
         notification = NotificationStudent(student=student, message=message)
         notification.save()
+        send_fcm_notification(student.admin.fcm_token, message,
+                              reverse('student_view_notification'))
         return HttpResponse("True")
     except Exception as e:
         return HttpResponse("False")
 
 
-@csrf_exempt
+@require_POST
 def send_staff_notification(request):
     id = request.POST.get('id')
     message = request.POST.get('message')
-    staff = get_object_or_404(Staff, admin_id=id)
+    staff = get_object_or_404(Staff.objects.select_related('admin'), admin_id=id)
     try:
-        url = "https://fcm.googleapis.com/fcm/send"
-        body = {
-            'notification': {
-                'title': "Student Management System",
-                'body': message,
-                'click_action': reverse('staff_view_notification'),
-                'icon': static('dist/img/AdminLTELogo.png')
-            },
-            'to': staff.admin.fcm_token
-        }
-        headers = {'Authorization':
-                   'key=AAAA3Bm8j_M:APA91bElZlOLetwV696SoEtgzpJr2qbxBfxVBfDWFiopBWzfCfzQp2nRyC7_A2mlukZEHV4g1AmyC6P_HonvSkY2YyliKt5tT3fe_1lrKod2Daigzhb2xnYQMxUWjCAIQcUexAMPZePB',
-                   'Content-Type': 'application/json'}
-        data = requests.post(url, data=json.dumps(body), headers=headers)
         notification = NotificationStaff(staff=staff, message=message)
         notification.save()
+        send_fcm_notification(staff.admin.fcm_token, message,
+                              reverse('staff_view_notification'))
         return HttpResponse("True")
     except Exception as e:
         return HttpResponse("False")
 
 
+@require_POST
 def delete_staff(request, staff_id):
     staff = get_object_or_404(CustomUser, staff__id=staff_id)
     staff.delete()
@@ -644,6 +640,7 @@ def delete_staff(request, staff_id):
     return redirect(reverse('manage_staff'))
 
 
+@require_POST
 def delete_student(request, student_id):
     student = get_object_or_404(CustomUser, student__id=student_id)
     student.delete()
@@ -651,6 +648,7 @@ def delete_student(request, student_id):
     return redirect(reverse('manage_student'))
 
 
+@require_POST
 def delete_course(request, course_id):
     course = get_object_or_404(Course, id=course_id)
     try:
@@ -662,6 +660,7 @@ def delete_course(request, course_id):
     return redirect(reverse('manage_course'))
 
 
+@require_POST
 def delete_subject(request, subject_id):
     subject = get_object_or_404(Subject, id=subject_id)
     subject.delete()
@@ -669,6 +668,7 @@ def delete_subject(request, subject_id):
     return redirect(reverse('manage_subject'))
 
 
+@require_POST
 def delete_session(request, session_id):
     session = get_object_or_404(Session, id=session_id)
     try:

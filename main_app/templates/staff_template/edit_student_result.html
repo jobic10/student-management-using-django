@@ -82,7 +82,7 @@
                     var div_data = "<option>Select Student</option>"
 
                     for (key in json_data) {
-                        div_data += "<option value='" + json_data[key]['id'] + "'>" + json_data[key]['name'] + " </option>"
+                        div_data += "<option value='" + json_data[key]['id'] + "'>" + escapeHtml(json_data[key]['name']) + " </option>"
                     }
              
                     $("#id_student").html(div_data)

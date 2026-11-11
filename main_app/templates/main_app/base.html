@@ -122,6 +122,21 @@
     <script>
         $.widget.bridge('uibutton', $.ui.button)
     </script>
+    <!-- Send the CSRF token with every jQuery AJAX request -->
+    <script>
+        $.ajaxSetup({
+            headers: { 'X-CSRFToken': '{{ csrf_token }}' }
+        });
+        // Escape user supplied text before inserting it into HTML strings
+        function escapeHtml(value) {
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+    </script>
     <!-- Bootstrap 4 -->
     <script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.min.js'%} "></script>
     <!-- ChartJS -->

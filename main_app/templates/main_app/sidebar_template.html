@@ -454,12 +454,15 @@
 
 
 <li class="nav-item">
-    <a href="{% url 'user_logout' %}" onclick="return confirm('Your session would be terminated.\n\nProceed?')" class="nav-link">
-        <i class="nav-icon fas fa-th"></i>
-        <p>
-            Logout
-        </p>
-    </a>
+    <form method="post" action="{% url 'user_logout' %}" onsubmit="return confirm('Your session would be terminated.\n\nProceed?')">
+        {% csrf_token %}
+        <button type="submit" class="nav-link btn btn-link text-left w-100" style="color: inherit;">
+            <i class="nav-icon fas fa-th"></i>
+            <p>
+                Logout
+            </p>
+        </button>
+    </form>
 </li>
 </ul>
 </nav>

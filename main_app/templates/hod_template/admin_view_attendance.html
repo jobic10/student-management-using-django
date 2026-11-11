@@ -186,13 +186,13 @@ if (attendance_date.length  == 0){
 
                     for (key in json_data) {
                             if (json_data[key]['status'] == 'True'){
-                                div_data += "<div class='col-lg-3 attendance_div_green'><b>"+ json_data[key]['name'] + "</b><br/>Present</div>" 
+                                div_data += "<div class='col-lg-3 attendance_div_green'><b>"+ escapeHtml(json_data[key]['name']) + "</b><br/>Present</div>" 
                             }else{
         
-                                div_data += "<div class='col-lg-3 attendance_div_red'><b>"+ json_data[key]['name'] + "</b><br/>Absent</div>"
+                                div_data += "<div class='col-lg-3 attendance_div_red'><b>"+ escapeHtml(json_data[key]['name']) + "</b><br/>Absent</div>"
                             }
                         }
-                       // div_data += "<div class='col-lg-3'><div class='form-check custom-control custom-checkbox'><input type='checkbox' class='custom-control-input' " + (json_data[key]['status'] ? "checked='checked'" : "")+" name='student_data[]' value=" + json_data[key]['id'] + " id='checkbox" + json_data[key]['id'] + "' /> <label for='checkbox" + json_data[key]['id'] + "' class='custom-control-label'>" + json_data[key]['name']  + (json_data[key]['status'] ? " [Present] " : " [Absent] ")+"</label></div> </div>"
+                       // div_data += "<div class='col-lg-3'><div class='form-check custom-control custom-checkbox'><input type='checkbox' class='custom-control-input' " + (json_data[key]['status'] ? "checked='checked'" : "")+" name='student_data[]' value=" + json_data[key]['id'] + " id='checkbox" + json_data[key]['id'] + "' /> <label for='checkbox" + json_data[key]['id'] + "' class='custom-control-label'>" + escapeHtml(json_data[key]['name'])  + (json_data[key]['status'] ? " [Present] " : " [Absent] ")+"</label></div> </div>"
                     div_data += "</div></div>"
                     $("#student_data").html(div_data)
                 }
