@@ -1,13 +1,15 @@
 import json
 import requests
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render, reverse
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 
 from .EmailBackend import EmailBackend
-from .models import Attendance, Session, Subject
+from .models import Attendance, Session, Staff, Subject
 
 # Create your views here.
 
@@ -27,24 +29,25 @@ def doLogin(request, **kwargs):
     if request.method != 'POST':
         return HttpResponse("<h4>Denied</h4>")
     else:
-        #Google recaptcha
-        captcha_token = request.POST.get('g-recaptcha-response')
-        captcha_url = "https://www.google.com/recaptcha/api/siteverify"
-        captcha_key = "6LfswtgZAAAAABX9gbLqe-d97qE2g1JP8oUYritJ"
-        data = {
-            'secret': captcha_key,
-            'response': captcha_token
-        }
-        # Make request
-        try:
-            captcha_server = requests.post(url=captcha_url, data=data)
-            response = json.loads(captcha_server.text)
-            if response['success'] == False:
-                messages.error(request, 'Invalid Captcha. Try Again')
+        #Google recaptcha (enabled when RECAPTCHA_SECRET_KEY is configured)
+        if settings.RECAPTCHA_SECRET_KEY:
+            captcha_token = request.POST.get('g-recaptcha-response')
+            captcha_url = "https://www.google.com/recaptcha/api/siteverify"
+            data = {
+                'secret': settings.RECAPTCHA_SECRET_KEY,
+                'response': captcha_token,
+                'remoteip': request.META.get('REMOTE_ADDR'),
+            }
+            # Make request
+            try:
+                captcha_server = requests.post(url=captcha_url, data=data, timeout=10)
+                response = json.loads(captcha_server.text)
+                if not response.get('success'):
+                    messages.error(request, 'Invalid Captcha. Try Again')
+                    return redirect('/')
+            except Exception:
+                messages.error(request, 'Captcha could not be verified. Try Again')
                 return redirect('/')
-        except:
-            messages.error(request, 'Captcha could not be verified. Try Again')
-            return redirect('/')
         
         #Authenticate
         user = EmailBackend.authenticate(request, username=request.POST.get('email'), password=request.POST.get('password'))
@@ -68,25 +71,30 @@ def logout_user(request):
     return redirect("/")
 
 
-@csrf_exempt
+@require_POST
 def get_attendance(request):
+    # Shared by HOD (any subject) and staff (only subjects they teach).
+    user = request.user
+    if not user.is_authenticated or user.user_type not in ('1', '2'):
+        raise PermissionDenied
     subject_id = request.POST.get('subject')
     session_id = request.POST.get('session')
-    try:
+    if user.user_type == '2':
+        staff = get_object_or_404(Staff, admin=user)
+        subject = get_object_or_404(Subject, id=subject_id, staff=staff)
+    else:
         subject = get_object_or_404(Subject, id=subject_id)
-        session = get_object_or_404(Session, id=session_id)
-        attendance = Attendance.objects.filter(subject=subject, session=session)
-        attendance_list = []
-        for attd in attendance:
-            data = {
-                    "id": attd.id,
-                    "attendance_date": str(attd.date),
-                    "session": attd.session.id
-                    }
-            attendance_list.append(data)
-        return JsonResponse(json.dumps(attendance_list), safe=False)
-    except Exception as e:
-        return None
+    session = get_object_or_404(Session, id=session_id)
+    attendance = Attendance.objects.filter(subject=subject, session=session)
+    attendance_list = []
+    for attd in attendance:
+        data = {
+                "id": attd.id,
+                "attendance_date": str(attd.date),
+                "session": attd.session.id
+                }
+        attendance_list.append(data)
+    return JsonResponse(json.dumps(attendance_list), safe=False)
 
 
 def showFirebaseJS(request):

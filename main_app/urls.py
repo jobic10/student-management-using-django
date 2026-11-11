@@ -15,8 +15,6 @@ Including another URLconf
 """
 from django.urls import path
 
-from main_app.EditResultView import EditResultView
-
 from . import hod_views, staff_views, student_views, views
 
 urlpatterns = [
@@ -100,13 +98,13 @@ urlpatterns = [
          name='get_student_attendance'),
     path("staff/attendance/save/",
          staff_views.save_attendance, name='save_attendance'),
-    path("staff/attendance/update/",
+    path("staff/attendance/update/save/",
          staff_views.update_attendance, name='update_attendance'),
     path("staff/fcmtoken/", staff_views.staff_fcmtoken, name='staff_fcmtoken'),
     path("staff/view/notification/", staff_views.staff_view_notification,
          name="staff_view_notification"),
     path("staff/result/add/", staff_views.staff_add_result, name='staff_add_result'),
-    path("staff/result/edit/", EditResultView.as_view(),
+    path("staff/result/edit/", staff_views.EditResultView.as_view(),
          name='edit_student_result'),
     path('staff/result/fetch/', staff_views.fetch_student_result,
          name='fetch_student_result'),
