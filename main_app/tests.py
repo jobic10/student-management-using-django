@@ -361,3 +361,38 @@ class QueryCountTests(TestCase):
         self.assertEqual(context['data_present'], [0, 1, 0, 1])
         self.assertEqual(context['data_absent'], [1, 0, 1, 0])
         self.assertEqual(context['percent_present'], 50)
+
+
+class LogoutTests(TestCase):
+    def setUp(self):
+        self.user = make_user('stu@example.com', 3)
+        self.client.force_login(self.user)
+
+    def test_logout_requires_post(self):
+        response = self.client.get(reverse('user_logout'))
+        self.assertEqual(response.status_code, 405)
+        self.assertIn('_auth_user_id', self.client.session)
+
+    def test_logout_requires_csrf_token(self):
+        client = Client(enforce_csrf_checks=True)
+        client.force_login(self.user)
+        response = client.post(reverse('user_logout'))
+        self.assertEqual(response.status_code, 403)
+        self.assertIn('_auth_user_id', client.session)
+
+    def test_post_logs_out(self):
+        response = self.client.post(reverse('user_logout'))
+        self.assertRedirects(response, '/', fetch_redirect_response=False)
+        self.assertNotIn('_auth_user_id', self.client.session)
+
+    def test_logout_rendered_as_form(self):
+        content = self.client.get(reverse('student_home')).content.decode()
+        self.assertIn('action="%s"' % reverse('user_logout'), content)
+        self.assertNotIn('href="%s"' % reverse('user_logout'), content)
+
+    def test_unknown_role_is_logged_out(self):
+        CustomUser.objects.filter(pk=self.user.pk).update(user_type='9')
+        response = self.client.get(reverse('student_home'))
+        self.assertRedirects(response, reverse('login_page'),
+                             fetch_redirect_response=False)
+        self.assertNotIn('_auth_user_id', self.client.session)

@@ -65,9 +65,9 @@ def doLogin(request, **kwargs):
 
 
 
+@require_POST
 def logout_user(request):
-    if request.user != None:
-        logout(request)
+    logout(request)
     return redirect("/")
 
 

@@ -1,5 +1,6 @@
 from django.utils.deprecation import MiddlewareMixin
 from django.urls import reverse
+from django.contrib.auth import logout
 from django.shortcuts import redirect
 
 
@@ -30,9 +31,8 @@ class LoginCheckMiddleWare(MiddlewareMixin):
         if user.is_authenticated:
             home = ROLE_HOME.get(user.user_type)
             if home is None:  # Unknown role, end the session
-                if request.path == reverse('user_logout'):
-                    return None
-                return redirect(reverse('user_logout'))
+                logout(request)
+                return redirect(reverse('login_page'))
             required_role = MODULE_ROLES.get(modulename)
             if required_role is not None:
                 if user.user_type != required_role:
