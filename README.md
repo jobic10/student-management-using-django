@@ -74,7 +74,7 @@ Images are from [Unsplash](https://unsplash.com)
 1. Install Git Version Control
 [ https://git-scm.com/ ]
 
-2. Install Python Latest Version
+2. Install Python 3.10 or newer
 [ https://www.python.org/downloads/ ]
 
 3. Install Pip (Package Manager)
@@ -139,14 +139,30 @@ $  cd student-management-using-django
 $  pip3 install -r requirements.txt
 ```
 
-**5. Add the hosts**
+**5. Configure environment variables**
 
-- Got to settings.py file 
-- Then, On allowed hosts, Use **[]** as your host. 
-```python
-ALLOWED_HOSTS = []
+Settings are read from environment variables. For local development the only one you need is `DEBUG`:
+
 ```
-*Do not use the fault allowed settings in this repo. It has security risk!*
+$  export DEBUG=True
+```
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `DEBUG` | No (default `False`) | Set to `True` for local development only. |
+| `MY_SECRET_KEY` | Yes in production | Django secret key. A development-only key is used when `DEBUG=True`. |
+| `ALLOWED_HOSTS` | Yes in production | Comma separated hosts, e.g. `example.com,www.example.com`. Defaults to `localhost,127.0.0.1`. |
+| `CSRF_TRUSTED_ORIGINS` | If behind a proxy/HTTPS | Comma separated origins with scheme, e.g. `https://example.com`. |
+| `DATABASE_URL` | No | e.g. `postgres://user:pass@host:5432/db`. SQLite is used when unset. |
+| `RECAPTCHA_SECRET_KEY` | No | Google reCAPTCHA secret. Captcha verification is skipped when unset. |
+| `FCM_SERVER_KEY` | No | Firebase Cloud Messaging server key for push notifications. |
+| `EMAIL_ADDRESS` / `EMAIL_PASSWORD` | For password reset | SMTP credentials. |
+| `SECURE_SSL_REDIRECT`, `SECURE_HSTS_SECONDS` | No | HTTPS hardening used when `DEBUG=False`. |
+
+Then apply the migrations:
+```
+$  python manage.py migrate
+```
 
 
 **6. Now Run Server**
@@ -202,6 +218,12 @@ Password: staff
 Email: student@student.com
 Password: student
 
+
+
+## Running the tests
+```
+$  python manage.py test
+```
 
 
 ## For Sponsor or Projects Enquiry
