@@ -74,7 +74,7 @@ Images are from [Unsplash](https://unsplash.com)
 1. Install Git Version Control
 [ https://git-scm.com/ ]
 
-2. Install Python 3.10 or newer
+2. Install Python 3.11 or newer
 [ https://www.python.org/downloads/ ]
 
 3. Install Pip (Package Manager)
